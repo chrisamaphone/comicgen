@@ -3,8 +3,6 @@
 Current prototype spits out a comic in the following format:
 
 <code>
-- ComicGen.gen [] 2;
-val it =
   [({elements=[1,2],name="aid"},Add),
    ({elements=[3,1,2],name="monolog"},Subtract),
    ({elements=[3,2],name="carry"},Moment),
