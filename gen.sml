@@ -1,8 +1,6 @@
 structure ComicGen =
 struct
 
-datatype posrel = Adjacent | Touching | Holding | Above | Below
-
 (* visual elements *)
 type ve = int
 
