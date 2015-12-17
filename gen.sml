@@ -187,7 +187,7 @@ val rand = Random.rand(1,13123)
   fun fillFrame ({name,nholes}: frame) (VEs : ve list) : panel =
     {name=name, elements=VEs}
 
-  fun gen (soFar:comic) (nves : int) : comic =
+  fun gen (soFar:comic) (nves : int) min max : comic =
     case soFar of
          [] => 
          let 
@@ -196,12 +196,17 @@ val rand = Random.rand(1,13123)
            val panel = fillFrame new_frame VEs
            val transition = roll_continue ()
          in
-           gen [(panel, transition)] nves
+           gen [(panel, transition)] nves min max
          end
        | ((current_panel, transition)::more) =>
            let
+             val current_length = List.length soFar
              val next_transition = 
-               if (List.length soFar <= 3) then roll_continue () else roll ()
+               if current_length >= max then End
+               else
+                if current_length < min
+                then roll_continue () 
+                else roll ()
            in
              case transition of
                   End => rev soFar
@@ -211,7 +216,7 @@ val rand = Random.rand(1,13123)
                       val (panel, newTotal) = 
                         pickPanel allPrior current_panel transition
                     in
-                      gen ((panel, next_transition)::soFar) newTotal
+                      gen ((panel, next_transition)::soFar) newTotal min max
                     end
 
                     (*
