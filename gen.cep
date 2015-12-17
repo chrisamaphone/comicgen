@@ -139,8 +139,8 @@ selected meanwhile * $next_in_story (s N) * leq N' N * prev_VEs _
 
 create_rendezVous :
 selected rendezVous * $in_story VE * prev_VEs VEs * not_member VE VEs
-      * leq (s z) (s N)
-  -o fill_frame (s N) * fill_VEs N * selected_ves (cons VE nil).
+      * available F * nholes F (s N)
+  -o fill_VEs N * selected_ves (cons VE nil) * selected_frame F.
 
 introduce_new_VE :
 selected rendezVous * prev_VEs VEs * list_length VEs N * next_in_story Vn
