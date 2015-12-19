@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>js_of_ocaml example</title>
+    <script type="text/javascript" src="./bind_gen.js"></script>
+    <script type="text/javascript">
+      function add_comic_JSON(){
+        nves = parseInt(document.getElementById('NVEs').value);
+        min = parseInt(document.getElementById('min').value);
+        max = parseInt(document.getElementById('max').value);
+
+        document.getElementById('output').innerHTML =
+          comic.gen(nves, min, max);
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Comics generator</h1>
+    <p>This is just a very raw interface
+    to <a href="https://github.com/chrisamaphone/comicgen/">this
+    code</a>,
+    see <a href="http://lambdamaphone.blogspot.fr/2015/12/generativity-interpretation-study-of.html">this
+    blog post</a> for details.</p>
+
+
+    <form>
+      Number of Visual Elements (NVEs): <input type="text" value="4" id="NVEs"/><br/>
+      Min: <input type="text" value="10" id="min"/><br/>
+      Max: <input type="text" value="20" id="max"/><br/>
+    </form>
+
+    <p><a href="#" onClick="add_comic_JSON();">Click to generate stuff</a></p>
+    <pre id="output"></pre>
+  </body>
+</html>

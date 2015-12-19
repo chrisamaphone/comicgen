@@ -1,8 +1,10 @@
 (* visual elements *)
 type ve = int
+  [@@deriving yojson]
 
 (* a frame has a name and a number of holes *)
 type frame = {name: string; nholes:int}
+  [@@deriving yojson]
 
   let available_frames =
     [
@@ -19,11 +21,14 @@ type frame = {name: string; nholes:int}
     ]
 
 type panel = {name:string; elements : ve list}
+  [@@deriving yojson]
 
 type transition
   = Moment | Add | Subtract | Meanwhile | RendezVous | End
+  [@@deriving yojson]
 
 type comic = (panel * transition) list
+  [@@deriving yojson]
 
   (* initialize the random number generator *)
   let () = Random.full_init [|1; 13123|]
