@@ -1,103 +1,98 @@
-structure ComicGen =
-struct
-
 (* visual elements *)
 type ve = int
 
 (* a frame has a name and a number of holes *)
-type frame = {name:string, nholes:int}
+type frame = {name: string; nholes:int}
 
-  val available_frames =
+  let available_frames =
     [
-      {name="whisper", nholes=2},
-      {name="monolog", nholes=1},
-      {name="dialog", nholes=2},
-      {name="touch", nholes=2},
-      {name="blank", nholes=0},
-      {name="walk", nholes=1},
-      {name="posse", nholes=4},
-      {name="carry", nholes=2},
-      {name="aid", nholes=2},
-      {name="fall", nholes=1}
+      {name="whisper"; nholes=2};
+      {name="monolog"; nholes=1};
+      {name="dialog"; nholes=2};
+      {name="touch"; nholes=2};
+      {name="blank"; nholes=0};
+      {name="walk"; nholes=1};
+      {name="posse"; nholes=4};
+      {name="carry"; nholes=2};
+      {name="aid"; nholes=2};
+      {name="fall"; nholes=1}
     ]
 
-type panel = {name:string, elements : ve list}
+type panel = {name:string; elements : ve list}
 
-datatype transition
+type transition
   = Moment | Add | Subtract | Meanwhile | RendezVous | End
 
 type comic = (panel * transition) list
 
-val rand = Random.rand(1,13123)
+  (* initialize the random number generator *)
+  let () = Random.full_init [|1; 13123|]
 
-  fun roll () =
-    case Random.randRange (1,6) rand of
-         1 => Moment
-       | 2 => Add
-       | 3 => Subtract
-       | 4 => Meanwhile 
-       | 5 => RendezVous
-       | _ => End
+  let rand_range a b =
+    (* Random.int is between 0 and bound (excluded) *)
+    a + Random.int (b - a + 1)
 
-  fun roll_continue () =
-    case roll () of 
-         End => roll_continue ()
-       | other => other
+  let roll () =
+    match rand_range 1 6 with
+         1 -> Moment
+       | 2 -> Add
+       | 3 -> Subtract
+       | 4 -> Meanwhile
+       | 5 -> RendezVous
+       | _ -> End
 
-  fun randElt l =
-    List.nth (l, Random.randRange (0, (List.length l) - 1) rand)
+  let rec roll_continue () =
+    match roll () with
+         End -> roll_continue ()
+       | other -> other
 
-  fun randSplit l =
-  let
-    val idx = Random.randRange (0, List.length l - 1) rand
-    fun split [] target prefix idx = raise Subscript
-      | split (x::xs) target prefix idx =
-            if target = idx then ((rev prefix)@xs, x)
-            else split xs target (x::prefix) (idx+1)
-  in
+  let randElt l =
+    List.nth l (Random.int (List.length l))
+
+  let randSplit l =
+    let idx = Random.int (List.length l) in
+    let rec split li target prefix idx = match li with
+        | [] -> invalid_arg "split: empty list"
+        | x::xs ->
+              if target = idx then ((List.rev prefix)@xs, x)
+              else split xs target (x::prefix) (idx+1)
+    in
     split l idx [] 0
-  end
 
-  fun hasAtLeastNHoles n {name, nholes} = nholes >= n
-  fun hasAtMostNHoles n {name, nholes} = nholes <= n
+  let hasAtLeastNHoles n {nholes} = nholes >= n
+  let hasAtMostNHoles n {nholes} = nholes <= n
 
-  fun pickRandomFrame () =
+  let pickRandomFrame () =
     randElt available_frames
 
-  fun pickFrame nVEs =
+  let pickFrame nVEs =
     randElt (List.filter (hasAtMostNHoles nVEs) available_frames)
 
-  fun genElts n = List.tabulate (n, fn i => i +1)
-  fun newElt n = n+1
+  let genElts n = Array.to_list (Array.init n (fun i -> i +1))
+  let newElt n = n+1
 
-  fun decideNew unused =
+  let decideNew unused =
     if List.length unused = 0 then true (* make up new if unused is empty *)
     else
-      case Random.randRange (0,2) rand of
-           0 => true
-         | _ => false (* bias toward using previous chars *)
+      match Random.int 3 with
+           0 -> true
+         | _ -> false (* bias toward using previous chars *)
 
-  fun pickRandomVEs' unused n acc counter =
+  let rec pickRandomVEs' unused n acc counter =
     if n = 0 then (acc, counter)
     else if not (decideNew unused) then
            (* choose a previously-appearing character *)
-              let
-                val (unused, elt) = randSplit unused
-              in
-                pickRandomVEs' unused (n-1) (elt::acc) counter
-              end
+              let (unused, elt) = randSplit unused in
+              pickRandomVEs' unused (n-1) (elt::acc) counter
            (* choose a new character *)
          else pickRandomVEs' unused (n-1) ((newElt counter)::acc) (counter+1)
 
-  fun pickRandomVEs unused n counter =
+  let pickRandomVEs unused n counter =
     pickRandomVEs' unused n [] counter
 
-  fun removeRandom l =
-  let
-    val elt = randElt l
-  in
-    List.filter (fn x => not (x = elt)) l
-  end
+  let removeRandom l =
+    let elt = randElt l in
+    List.filter (fun x -> not (x = elt)) l
 
   (*
   (* XXX eventually care about transition type *)
@@ -108,11 +103,11 @@ val rand = Random.rand(1,13123)
       case t of
            Moment => (elements, totalNVEs)
          | Add => (elements, totalNVEs) (* XXX *)
-         | Subtract => 
-             if List.length elements > 0 
+         | Subtract =>
+             if List.length elements > 0
              then (removeRandom elements, totalNVEs)
              else (elements, totalNVEs)
-         | Meanwhile => 
+         | Meanwhile =>
              (* XXX eventually exclude current VEs *)
              pickRandomVEs allPriorVEs n totalNVEs
          | RendezVous => (* (randElt available_ves)::elements *)
@@ -122,107 +117,78 @@ val rand = Random.rand(1,13123)
   end
   *)
 
-  fun listMember x [] = false
-    | listMember x (y::ys) = x = y orelse listMember x ys
+  let nonmembers l l' = List.filter (fun x -> not (List.mem x l)) l'
 
-  fun nonmembers l l' = List.filter (fn x => not (listMember x l)) l'
-
-  fun pickPanel allPrior (current_panel : panel) transition
+  let pickPanel allPrior (current_panel : panel) transition
     : panel * int =
-    let
-      val justPrior = #elements current_panel
-      val currentNVEs = List.length justPrior
-      val totalNVEs = List.length allPrior
-    in
-      case transition of
-           Moment =>
-           let
-             val {name, nholes} = pickFrame currentNVEs
-           in
-             ({name=name, elements=justPrior}, totalNVEs) 
-           end
-         | Add =>
-           let
-             val unused = nonmembers justPrior allPrior
-             val howManyNew = 1 (* Random.randRange (1,2) rand *)
-             val {name, nholes} = pickFrame (currentNVEs + howManyNew)
-             val (new_elts, new_total) = pickRandomVEs unused howManyNew totalNVEs
-             val new_elts = new_elts @ justPrior
-           in
-             ({name=name, elements=new_elts}, new_total) 
-           end
-         | Subtract =>
+    let justPrior = current_panel.elements in
+    let currentNVEs = List.length justPrior in
+    let totalNVEs = List.length allPrior in
+      match transition with
+           Moment ->
+           let {name; nholes} = pickFrame currentNVEs in
+           ({name; elements=justPrior}, totalNVEs)
+         | Add ->
+           let unused = nonmembers justPrior allPrior in
+           let howManyNew = 1 (* Random.randRange (1,2) rand *) in
+           let  {name; nholes} = pickFrame (currentNVEs + howManyNew) in
+           let (new_elts, new_total) = pickRandomVEs unused howManyNew totalNVEs in
+           let new_elts = new_elts @ justPrior in
+             ({name; elements=new_elts}, new_total)
+         | Subtract ->
              if List.length justPrior > 0 then
-              let
-                val nVEs = currentNVEs - 1
-                val {name, nholes} = pickFrame nVEs
-                val elts = removeRandom justPrior
-              in
-                ({name=name, elements=elts}, totalNVEs)
-              end
+              let nVEs = currentNVEs - 1 in
+              let {name; nholes} = pickFrame nVEs in
+              let elts = removeRandom justPrior in
+                ({name; elements=elts}, totalNVEs)
             else
-              let
-                val {name, nholes} = pickFrame 0
-              in
-                ({name=name, elements=[]}, totalNVEs)
-              end
-         | Meanwhile =>
-             let
-               val skipVEs = nonmembers justPrior allPrior
-               val {name, nholes} = pickRandomFrame ()
-               val (elts, newTotal) = pickRandomVEs skipVEs nholes totalNVEs
-             in
-               ({name=name, elements=elts}, newTotal)
-             end
-         | RendezVous =>
-             let
-               val {name, nholes} = pickRandomFrame ()
-               val (elts, newTotal) = pickRandomVEs allPrior nholes totalNVEs
-             in
-               ({name=name, elements=elts}, newTotal)
-             end
-         | End => ({name="blank", elements=[]}, totalNVEs)
-    end
+              let {name; nholes} = pickFrame 0 in
+                ({name; elements=[]}, totalNVEs)
+         | Meanwhile ->
+             let skipVEs = nonmembers justPrior allPrior in
+             let {name; nholes} = pickRandomFrame () in
+             let (elts, newTotal) = pickRandomVEs skipVEs nholes totalNVEs in
+               ({name; elements=elts}, newTotal)
+         | RendezVous ->
+             let {name; nholes} = pickRandomFrame () in
+             let (elts, newTotal) = pickRandomVEs allPrior nholes totalNVEs in
+               ({name; elements=elts}, newTotal)
+         | End -> ({name="blank"; elements=[]}, totalNVEs)
 
-  fun fillFrame ({name,nholes}: frame) (VEs : ve list) : panel =
-    {name=name, elements=VEs}
+  let fillFrame ({name; nholes}: frame) (visual_elts : ve list) : panel =
+    {name; elements=visual_elts}
 
-  fun gen (soFar:comic) (nves : int) min max : comic =
-    case soFar of
-         [] => 
-         let 
-           val new_frame = pickFrame nves
-           val VEs = genElts nves
-           val panel = fillFrame new_frame VEs
-           val transition = roll_continue ()
-         in
+  let rec gen (soFar:comic) (nves : int) min max : comic =
+    match soFar with
+         [] ->
+         let new_frame = pickFrame nves in
+         let visual_elts = genElts nves in
+         let panel = fillFrame new_frame visual_elts in
+         let transition = roll_continue () in
            gen [(panel, transition)] nves min max
-         end
-       | ((current_panel, transition)::more) =>
-           let
-             val current_length = List.length soFar
-             val next_transition = 
+       | ((current_panel, transition)::more) ->
+           let current_length = List.length soFar in
+           let next_transition =
                if current_length >= max then End
                else
                 if current_length < min
-                then roll_continue () 
+                then roll_continue ()
                 else roll ()
            in
-             case transition of
-                  End => rev soFar
-                | tr =>
-                    let
-                      val allPrior = genElts nves
-                      val (panel, newTotal) = 
+             begin match transition with
+                  End -> List.rev soFar
+                | tr ->
+                    let allPrior = genElts nves in
+                    let (panel, newTotal) =
                         pickPanel allPrior current_panel transition
                     in
                       gen ((panel, next_transition)::soFar) newTotal min max
-                    end
+              end
 
                     (*
                       val currentNVEs = List.length justPrior
                       val {name=cname, elements=ves} = current_panel
-                      val {name=fname, nholes} = pickRandomFrame () (* XXX *) 
+                      val {name=fname, nholes} = pickRandomFrame () (* XXX *)
                       val (new_ves, new_total) = pickVEs nholes allPrior tr soFar
                       val panel = fillFrame {name=fname, nholes=nholes} new_ves
                     in
@@ -230,11 +196,7 @@ val rand = Random.rand(1,13123)
                     end
                     *)
 
-           end
-
   (* Next steps:
   * - Impose a limit on the number of entities introduced?
   * - port to JS and do image generation?
   *)
-
-end
