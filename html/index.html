@@ -4,19 +4,174 @@
     <title>js_of_ocaml example</title>
     <script type="text/javascript" src="./bind_gen.js"></script>
     <script type="text/javascript">
+
+      shapenames = ['circle', 'rect']
+      width_range = {min:15, max:50}
+      height_range = {min:15, max:50}
+
+      colors =
+      ["red", "green", "blue", "purple",
+        "yellow", "cyan", "magenta", "black", "grey"]
+
+      // Utility functions for randomness
+
+      function randInt(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+      }
+
+      function random(a) {
+        return a[randInt(0, a.length)]
+      }
+
+      // Visual Element (VE) helper functions
+      function getWidth(sh) {
+        if (sh.name == 'circle') {
+          return sh.radius * 2;
+        }
+        else {
+          return sh.width;
+        }
+      }
+
+      function getHeight(sh) {
+        if (sh.name == 'circle') {
+          return sh.radius * 2;
+        }
+        else {
+          return sh.height;
+        }
+      }
+
+      function alignBottomLeft(sh, pos) {
+        if(sh.name == 'circle') {
+          pos.x = pos.x+sh.radius;
+          pos.y = pos.y-sh.radius;
+        }
+        else {
+          pos.y = pos.y - sh.height;
+        }
+      }
+
+
+      // Drawing functions
+
+      function newVE() {
+        my_shapename = random(shapenames);  
+        if (my_shapename == 'circle') {
+          my_radius = randInt(width_range.min, width_range.max)/2;
+          myshape = {name:'circle', radius:my_radius}
+        } else {
+          my_width = randInt(width_range.min, width_range.max);
+          my_height = randInt(width_range.min, width_range.max);
+          myshape = {name:'rect', width:my_width, height:my_height}
+        }
+        // myshape = random(shapes)
+        console.log("shape: " + JSON.stringify(myshape));
+        mycolor = random(colors)
+        console.log("color: " + mycolor);
+        return {shape: myshape, color: mycolor};
+      }
+
+      function draw_rect(context, x, y, w, h, color) {
+        context.fillStyle = color;
+        context.fillRect(x,y,w,h);
+      }
+
+      function draw_circle(context, x, y, sz, color) {
+        context.beginPath();
+        context.arc(x, y, sz, 0, 2 * Math.PI, false);
+        context.fillStyle = color;
+        context.fill();
+      }
+
+      function draw_at(ctx, ve, x, y) {
+        console.log("Drawing "+JSON.stringify(ve)+" at ("+x+", "+y+")");
+        if (ve.shape.name == 'circle') {
+          draw_circle(ctx, x, y, ve.shape.radius, ve.color);
+        }
+        else if (ve.shape.name == 'rect') {
+          draw_rect(ctx, 
+            x, y, ve.shape.width, ve.shape.height, ve.color)
+        }
+      }
+
+      function draw_panel(cvs, frame_name, panel_ves, ve_table) {
+
+        // ctx.fillRect(20,30,20,30,"green"); // TEST
+        ctx = cvs.getContext('2d');
+        
+        x_offset = 5;
+        y_offset = cvs.height;
+        for (j = 0; j < panel_ves.length; j++) {
+          ve_index = panel_ves[j]
+          if (ve_table[ve_index] == undefined) {
+            console.log("Making a new VE: "+ve_index);
+            // make a new VE and push it to the table
+            ve_table[ve_index] = newVE();
+          }
+          ve = ve_table[ve_index];
+          console.log("drawing VE " + ve_index + ", "+JSON.stringify(ve));
+          pos = {x:x_offset, y:y_offset};
+          console.log("initial offsets: "+x_offset+", "+y_offset);
+          alignBottomLeft(ve.shape, pos);
+          draw_at(ctx, ve, pos.x, pos.y);
+          x_offset += getWidth(ve.shape) + 5;
+        }
+
+      }
+      
+      function draw_comic(n, comicSpec) {
+
+        ves = []
+
+        for (i = 0; i < comicSpec.length; i++) {
+          panelSpec = comicSpec[i][0];
+          frame_name = panelSpec.name;
+          ve_set = panelSpec.elements;
+          draw_panel(document.getElementById('canvas'+i), frame_name, ve_set, ves);
+        }
+      }
+
+  
       function add_comic_JSON(){
         nves = parseInt(document.getElementById('NVEs').value);
-        min = parseInt(document.getElementById('min').value);
-        max = parseInt(document.getElementById('max').value);
+        min = parseInt(document.getElementById('min').value) - 1;
+        max = parseInt(document.getElementById('max').value) - 1;
 
+        comicSpecString = comic.gen(nves, min, max);
         document.getElementById('output').innerHTML =
-          comic.gen(nves, min, max);
+          comicSpecString
+
+        comicSpec = JSON.parse(comicSpecString)
+
+        comicDOMelement = document.getElementById('comic');
+        comicDOMelement.innerHTML = ""
+        num_canvases = 0
+
+        console.log("Comic length: "+comicSpec.length);
+        console.log("First element: "+JSON.stringify(comicSpec[0]));
+        // Set up comic frames
+        for (i = 0; i < comicSpec.length; i++) {
+          console.log("Adding frame "+i);
+          comicDOMelement.innerHTML +=
+            "<canvas id='canvas"+i+"' width='200' height='200' \
+            style='border:1px solid #000000;'></canvas> &nbsp;&nbsp;"
+          num_canvases++;
+          if ((i+1) % 4 == 0) {
+            comicDOMelement.innerHTML += "<br><br>"
+          }
+        }
+
+        draw_comic(num_canvases, comicSpec);
+
+        console.log("Number of canvases: "+num_canvases);
+
       }
     </script>
   </head>
   <body>
     <h1>Comics generator</h1>
-    <p>This is just a very raw interface
+    <p>This is an interface
     to <a href="https://github.com/chrisamaphone/comicgen/">this
     code</a>,
     see <a href="http://lambdamaphone.blogspot.fr/2015/12/generativity-interpretation-study-of.html">this
@@ -24,12 +179,15 @@
 
 
     <form>
-      Number of Visual Elements (NVEs): <input type="text" value="4" id="NVEs"/><br/>
-      Min: <input type="text" value="10" id="min"/><br/>
-      Max: <input type="text" value="20" id="max"/><br/>
+      Number of starting visual elements: <input type="text" value="4" id="NVEs"/><br/>
+      Min panels: <input type="text" value="3" id="min"/><br/>
+      Max panels: <input type="text" value="4" id="max"/><br/>
     </form>
 
     <p><a href="#" onClick="add_comic_JSON();">Click to generate stuff</a></p>
     <pre id="output"></pre>
+
+    <pre id="comic"></pre>
+    
   </body>
 </html>
