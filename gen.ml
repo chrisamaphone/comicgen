@@ -1,12 +1,10 @@
 (* visual elements *)
 type ve = int
-  (* [@@deriving yojson] *)
+  [@@deriving yojson]
 
 (* a frame has a name and a number of holes *)
 type frame = {name: string; nholes:int}
-(*
   [@@deriving yojson]
-  *)
 
   let available_frames =
     [
@@ -23,16 +21,14 @@ type frame = {name: string; nholes:int}
     ]
 
 type panel = {name:string; elements : ve list}
-  (* [@@deriving yojson] *)
+  [@@deriving yojson]
 
 type transition
   = Moment | Add | Subtract | Meanwhile | RendezVous | End
-  (* [@@deriving yojson] *)
+  [@@deriving yojson]
 
 type comic = (panel * transition) list
-(*
   [@@deriving yojson]
-*)
 
   (* initialize the random number generator *)
   let () = Random.full_init [|1; 13123|]
@@ -201,6 +197,8 @@ type comic = (panel * transition) list
   (* first steps of a refactor where transitions are gen'd first,
      then panels. *)
 
+open Cohn
+
   let rec gen_transitions min max n_so_far : transition list =
     if n_so_far + 1 > max then [End]
     else 
@@ -256,7 +254,10 @@ type comic = (panel * transition) list
       match roles with
         (Establisher, Initial) -> [Moment; Subtract; Add; RendezVous]
       | (Establisher, Prolongation) -> [Moment; Subtract; Add]
+      | (Establisher, Peak) -> [Add; Meanwhile]
       | (Initial, Prolongation) -> [Moment; Subtract; Add]
+      | (Prolongation, Prolongation) -> [Moment; Subtract; Add]
+      | (Prolongation, Peak) -> [Subtract; Add; RendezVous]
       | (Initial, Peak) -> [Subtract; Add; Meanwhile; RendezVous]
       | (Peak, Release) -> [Subtract; Add; RendezVous; End]
       | _ -> [End] (* error! *)
@@ -270,6 +271,27 @@ type comic = (panel * transition) list
     in
       randElt candidates
 
+  (* Generates a *reversed* transition list based on the role sequence
+      "roles" *)
+  let rec gen_constrained_transitions prev_role roles acc =
+    match (prev_role, roles) with
+      (_, []) -> End::acc
+    | (None, current_role::roles) -> (* pass the buck *)
+        gen_constrained_transitions (Some current_role) roles acc
+    | (Some prev_role, current_role::roles) ->
+        let t = randElt (valid_transitions (prev_role, current_role))
+        in gen_constrained_transitions (Some current_role) roles (t::acc)
+
+  let gen_seq () = gen_role_sequence arc_grammar
+
+  let gen_constrained_by_seq nves seq =
+    let ts = gen_constrained_transitions None seq [] in
+    let ts = List.rev ts in
+      gen_with_transitions [] nves ts
+
+  let gen_constrained nves : comic =
+    let seq = gen_seq () in
+    gen_constrained_by_seq nves seq
 
   (*
   let rec gen_constrained (soFar:comic) (nves:int) panelRoles : comic =

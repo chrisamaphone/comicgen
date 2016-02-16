@@ -138,7 +138,12 @@
         min = parseInt(document.getElementById('min').value) - 1;
         max = parseInt(document.getElementById('max').value) - 1;
 
-        comicSpecString = comic.gen(nves, min, max);
+        comicSpecString = "";
+        if (document.getElementById('constrained').checked) {
+          comicSpecString = comic.gen_constrained(nves);
+        } else {
+          comicSpecString = comic.gen(nves, min, max);
+        }
         document.getElementById('output').innerHTML =
           comicSpecString
 
@@ -182,6 +187,7 @@
       Number of starting visual elements: <input type="text" value="4" id="NVEs"/><br/>
       Min panels: <input type="text" value="3" id="min"/><br/>
       Max panels: <input type="text" value="4" id="max"/><br/>
+      Constrain?: <input type="checkbox" id="constrained"/><br/>
     </form>
 
     <p><a href="#" onClick="add_comic_JSON();">Click to generate stuff</a></p>
