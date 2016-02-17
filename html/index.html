@@ -52,6 +52,67 @@
         }
       }
 
+      function alignCenter(sh, pos) {
+        if (sh.name == 'circle') {
+        // do nothing - already correct
+        } else {
+          pos.x = pos.x - getWidth(sh)/2;
+          pos.y = pos.y - getHeight(sh)/2;
+        }
+      }
+
+      // Frames
+      frames =
+      {"touching":
+        { holes:
+          [ { size: 100, // % of original size
+              horiz: 45, // % of frame size right
+              vert: 75, // % of frame size down
+            },
+            { size: 100, horiz: 55, vert: 75, }
+          ]
+        } ,
+
+       "monolog":
+       { holes:
+          [ { size: 100, horiz: 50, vert: 50 } ]
+       },
+
+       "carry":
+       { holes:
+          [ { size: 100, horiz: 50, vert: 50 },
+            { size: 100, horiz: 55, vert: 45 }
+          ]
+       },
+
+       "stack":
+       { holes: 
+          [ { size: 100, horiz: 50, vert: 60 },
+            { size: 100, horiz: 50, vert: 40 }
+         ]
+       },
+
+       "blank":
+       { holes: [] }
+      }
+
+      function frame_name_to_frame (name) {
+        if (name == "touch" || name == "whisper" || name == "aid") {
+          return frames["touching"];
+        }
+        if (name == "dialog" || name == "blank" || name == "walk" 
+         || name == "posse") {
+          return frames["blank"];
+        }
+        if (name == "carry") {
+          return frames["carry"];
+        }
+        if (name == "monolog" || name == "fall") {
+          return frames["monolog"];
+        }
+        return frames["blank"];
+      }
+
 
       // Drawing functions
 
@@ -95,6 +156,44 @@
         }
       }
 
+      function draw_adjacent (ctx, frame_height, frame_width, ve_set, x_offset) {
+        for (k = 0; k < ve_set.length; k++) {
+          ve = ve_set[k];
+          my_width = getWidth(ve.shape);
+          pos = {x: x_offset, y: frame_height - 20}
+          alignBottomLeft(ve.shape, pos);
+          draw_at(ctx, ve, pos.x, pos.y);
+          x_offset += my_width + 5;
+        }
+      }
+
+      function draw_frame (ctx, ve_set, frame_name, w, h) {
+        x_offset = 10;
+        if (frame_name == "blank") {
+            console.log("Drawing default frame "+frame_name);
+          draw_adjacent(ctx, h, w, ve_set, x_offset)
+        } else {
+            console.log("Drawing special frame: "+frame_name);
+          frame = frame_name_to_frame(frame_name);
+          for (idx = 0; idx < frame.holes.length; idx++) {
+            hole = frame.holes[idx];
+            ve = ve_set[idx];
+            x = 0.01*hole.horiz*w;
+            y = (0.01*hole.vert)*h;
+            pos = {x:x,y:y};
+            alignCenter(ve.shape, pos);
+            draw_at(ctx, ve, pos.x, pos.y);
+          } //end for loop over frame's holes
+          if (idx < ve_set.length) { // more VEs to draw
+            tail = [];
+            for (qq = idx; qq < ve_set.length; qq++) {
+              tail.push(ve_set[qq]);
+            }
+            draw_adjacent(ctx, h, w, tail, x_offset);
+          } //end draw leftover VEs
+        } //end else (non-blank frames)
+      } //end function draw_frame
+
       function draw_panel(cvs, frame_name, panel_ves, ve_table) {
 
         // ctx.fillRect(20,30,20,30,"green"); // TEST
@@ -102,21 +201,19 @@
         
         x_offset = 5;
         y_offset = cvs.height;
+        ves_to_draw = [];
         for (j = 0; j < panel_ves.length; j++) {
           ve_index = panel_ves[j]
           if (ve_table[ve_index] == undefined) {
             console.log("Making a new VE: "+ve_index);
-            // make a new VE and push it to the table
+            // make a new VE and add it to the table
             ve_table[ve_index] = newVE();
           }
-          ve = ve_table[ve_index];
-          console.log("drawing VE " + ve_index + ", "+JSON.stringify(ve));
-          pos = {x:x_offset, y:y_offset};
-          console.log("initial offsets: "+x_offset+", "+y_offset);
-          alignBottomLeft(ve.shape, pos);
-          draw_at(ctx, ve, pos.x, pos.y);
-          x_offset += getWidth(ve.shape) + 5;
+          ves_to_draw.push(ve_table[ve_index]);
         }
+
+        // draw_adjacent(ctx, cvs.height, cvs.width, ves_to_draw, 10);
+        draw_frame(ctx, ves_to_draw, frame_name, cvs.width, cvs.height);
 
       }
       
@@ -128,6 +225,7 @@
           panelSpec = comicSpec[i][0];
           frame_name = panelSpec.name;
           ve_set = panelSpec.elements;
+            console.log("drawing panel "+i);
           draw_panel(document.getElementById('canvas'+i), frame_name, ve_set, ves);
         }
       }
