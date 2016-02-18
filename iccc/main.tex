@@ -3,10 +3,31 @@
 \documentclass[letterpaper]{article}
 \usepackage{iccc}
 
-
 \usepackage{times}
 \usepackage{helvet}
 \usepackage{courier}
+\usepackage{xcolor}
+
+% ====================== CUSTOM COMMANDS =======================
+%\DeclareMathAlphabet\mathbfcal{OMS}{cmsy}{b}{n}
+\newcommand{\dref}[1]{Definition~\ref{#1}}
+\newcommand{\eref}[1]{Equation~\ref{#1}}
+\newcommand{\fref}[1]{Figure~\ref{#1}}
+\newcommand{\tref}[1]{Table~\ref{#1}}
+\newcommand{\sref}[1]{Section~\ref{#1}}
+\newcommand{\aref}[1]{Algorithm~\ref{#1}}
+\newcommand{\lpipe}{\rule[-0.4ex]{0.41pt}{2.3ex}\xspace}
+\newcommand{\citeA}[1] {\citeauthor{#1}~(\citeyear{#1})}
+\newcommand{\citeeg}[1] {(e.g. \citeauthor{#1}~\citeyear{#1})}
+
+% Notes for draft-editing. I suggest you put your initials in the 
+% first text env., and the note in the second text env.
+% Syntax: \note{%text%}{%text%}
+\def\note#1#2{\noindent {\color{red} {[\bf{#1}: {\it #2}]}}}
+
+
+
+
 \pdfinfo{
 	/Title (Operationalizing Comic Panel Transitions)
 	/Subject (Proceedings of ICCC)
@@ -14,7 +35,7 @@
 }
 % The file iccc.sty is the style file for ICCC proceedings.
 %
-\title{Operationalizing Comic Panel Transitions \\
+\title{A Discourse-first Approach to Visual Narrative Generation through Operationalizing Comic Panel Transitions \\
 Paper type: Technical Paper}
 \author{
 	Chris Martens\\
