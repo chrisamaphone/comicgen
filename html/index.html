@@ -157,7 +157,7 @@
       }
 
       function draw_adjacent (ctx, frame_height, frame_width, ve_set, x_offset) {
-        for (k = 0; k < ve_set.length; k++) {
+        for (var k = 0; k < ve_set.length; k++) {
           ve = ve_set[k];
           my_width = getWidth(ve.shape);
           pos = {x: x_offset, y: frame_height - 20}
@@ -175,7 +175,7 @@
         } else {
             console.log("Drawing special frame: "+frame_name);
           frame = frame_name_to_frame(frame_name);
-          for (idx = 0; idx < frame.holes.length; idx++) {
+          for (var idx = 0; idx < frame.holes.length; idx++) {
             hole = frame.holes[idx];
             ve = ve_set[idx];
             x = 0.01*hole.horiz*w;
@@ -186,7 +186,7 @@
           } //end for loop over frame's holes
           if (idx < ve_set.length) { // more VEs to draw
             tail = [];
-            for (qq = idx; qq < ve_set.length; qq++) {
+            for (var qq = idx; qq < ve_set.length; qq++) {
               tail.push(ve_set[qq]);
             }
             draw_adjacent(ctx, h, w, tail, x_offset);
@@ -202,7 +202,7 @@
         x_offset = 5;
         y_offset = cvs.height;
         ves_to_draw = [];
-        for (j = 0; j < panel_ves.length; j++) {
+        for (var j = 0; j < panel_ves.length; j++) {
           ve_index = panel_ves[j]
           if (ve_table[ve_index] == undefined) {
             console.log("Making a new VE: "+ve_index);
@@ -221,7 +221,7 @@
 
         ves = []
 
-        for (i = 0; i < comicSpec.length; i++) {
+        for (var i = 0; i < comicSpec.length; i++) {
           panelSpec = comicSpec[i][0];
           frame_name = panelSpec.name;
           ve_set = panelSpec.elements;
@@ -254,7 +254,7 @@
         console.log("Comic length: "+comicSpec.length);
         console.log("First element: "+JSON.stringify(comicSpec[0]));
         // Set up comic frames
-        for (i = 0; i < comicSpec.length; i++) {
+        for (var i = 0; i < comicSpec.length; i++) {
           console.log("Adding frame "+i);
           comicDOMelement.innerHTML +=
             "<canvas id='canvas"+i+"' width='200' height='200' \
