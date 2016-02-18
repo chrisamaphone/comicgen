@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>drawing with canvas</title>
+    <script type="text/javascript">
+
+/*
+      shapes =
+      [{name: 'circle', radius:60},
+       {name: 'circle', radius:100},
+       {name: 'circle', radius:25},
+       {name: 'rect', width: 80, height:15},
+       {name: 'rect', width: 60, height:60},
+       {name: 'rect', width: 20, height:40},
+       {name: 'rect', width: 30, height:20}]
+*/
+      shapenames = ['circle', 'rect']
+      width_range = {min:15, max:150}
+      height_range = {min:15, max:150}
+
+      colors =
+      ["red", "green", "blue", "purple",
+        "yellow", "cyan", "magenta", "black", "grey"]
+
+      ves = []
+
+      function randInt(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+      }
+
+      function random(a) {
+        return a[randInt(0, a.length)]
+      }
+
+      function draw_adjacent (ctx, ve_set, x_offset) {
+        for(i = 0; i < ve_set.length; i++) {
+          ve = ve_set[i];
+          my_width = getWidth(ve.shape);
+            console.log("my width: "+my_width);
+            console.log("current x offset: "+x_offset);
+          pos = {x: x_offset, y: frame_height - 20}
+          alignBottomLeft(ve.shape, pos);
+          draw_VE(ve, ctx, pos.x, pos.y);
+          x_offset += my_width + 5;
+            console.log("new x offset: "+x_offset);
+        }
+      }
+
+      function make_VEs(n) {
+        ves = []
+        for (i = 0; i < n; i++) {
+          console.log("generating random VE "+i);
+          my_shapename = random(shapenames)
+          if (my_shapename == 'circle') {
+            my_radius = randInt(width_range.min, width_range.max)/2;
+            myshape = {name:'circle', radius:my_radius}
+          } else {
+            my_width = randInt(width_range.min, width_range.max);
+            my_height = randInt(width_range.min, width_range.max);
+            myshape = {name:'rect', width:my_width, height:my_height}
+          }
+          // myshape = random(shapes)
+          console.log("shape: " + JSON.stringify(myshape));
+          mycolor = random(colors)
+          console.log("color: " + mycolor);
+          ves[i] = {shape: myshape, color:mycolor}
+        }
+      }
+
+      function getWidth(sh) {
+        if (sh.name == 'circle') {
+          return sh.radius * 2;
+        }
+        else {
+          return sh.width;
+        }
+      }
+
+      function getHeight(sh) {
+        if (sh.name == 'circle') {
+          return sh.radius * 2;
+        }
+        else {
+          return sh.height;
+        }
+      }
+
+      function alignCenter(sh, pos) {
+        if (sh.name == 'circle') {
+        // do nothing - already correct
+        } else {
+          pos.x = pos.x - getWidth(sh)/2;
+          pos.y = pos.y - getHeight(sh)/2;
+        }
+      }
+
+      function alignBottomLeft(sh, pos) {
+        if(sh.name == 'circle') {
+          pos.x = pos.x+sh.radius;
+          pos.y = pos.y-sh.radius;
+        }
+        else {
+          pos.y = pos.y - sh.height;
+        }
+      }
+
+      frames =
+      {"touching":
+        { holes:
+          [ { size: 100, // % of original size
+              horiz: 35, // % of frame size right
+              vert: 90, // % of frame size down
+            },
+            { size: 100, 
+              horiz: 55,
+              vert: 90,
+            }
+          ]
+        }
+        ,
+       "monolog":
+       { holes:
+          [ { size: 100,
+              horiz: 50,
+              vert: 50
+            }
+          ]
+       },
+       "carry":
+       { holes:
+          [ { size: 100,
+              horiz: 50,
+              vert: 50
+            },
+            { size: 100,
+              horiz: 55,
+              vert: 45
+            }
+          ]
+       },
+       "stack":
+       { holes:
+         [ { size: 100,
+             horiz: 50,
+             vert: 60
+           },
+           { size: 100,
+             horiz: 50,
+             vert: 40
+           }
+         ]
+       },
+       "blank":
+       { holes: [] }
+      }
+      // console.log("blank's holes: "+frames["blank"].holes.length);
+
+
+      // scale and position each VE according to the frame's holes
+      // then draw each VE.
+      function draw_frame(ctx, frame, panel_width, panel_height) {
+        if(frame == "blank") {
+          draw_adjacent(ctx, ves, 10);
+        } // XXX generalize: any leftover VEs just get drawn adjacently
+
+        else {
+          x_offset = 10;
+          fr = frames[frame];
+          for (i = 0; i < fr.holes.length; i++) {
+            hole = fr.holes[i];
+            ve = ves[i]; //invariant: #ves > #holes
+            // ignore size for now
+            x = 0.01*hole.horiz*panel_width;
+            y = (0.01*hole.vert)*panel_height;
+            pos = {x:x, y:y}
+            alignCenter(ve.shape, pos);
+            draw_VE(ve, ctx, pos.x, pos.y);
+            // update offsets
+            // x_offset = pos.x + getWidth(ve.shape);
+            // y_offset = pos.y;
+            // console.log("New offsets: "+x_offset+", "+y_offset);
+         }
+          if (i < ves.length) { //more VEs to draw
+            tail = []
+            for (j = i; j < ves.length; j++) {
+              tail.push(ves[j]);
+            }
+            draw_adjacent(ctx, tail, x_offset);
+          }
+        } // end else (general frame drawer)
+      } //end function draw_frame
+
+      function draw_VE(ve, context, x, y) {
+        if (ve.shape.name == 'circle') {
+          draw_circle(context, x, y, ve.shape.radius, ve.color);
+        }
+        else if (ve.shape.name == 'rect') {
+          draw_rect(context, 
+            x, y, ve.shape.width, ve.shape.height, ve.color)
+        }
+      }
+
+      function draw_rect(context, x, y, w, h, color) {
+        context.fillStyle = color;
+        context.fillRect(x,y,w,h);
+      }
+
+      function draw_circle(context, x, y, sz, color) {
+        context.beginPath();
+        context.arc(x, y, sz, 0, 2 * Math.PI, false);
+        context.fillStyle = color;
+        context.fill();
+      }
+
+      function add_comic(){
+        nves = parseInt(document.getElementById('NVEs').value);
+        ves = [];
+        frame = document.getElementById('frame').value;
+
+        frame_height = 300;
+        frame_width = 300;
+
+        document.getElementById('comic').innerHTML =
+          "<canvas id='myCanvas' width='"+frame_width
+          +"' height='"+frame_height
+          +"' style='border:1px solid #000000;'></canvas>"
+
+        console.log("frame: "+frame);
+        if (frames[frame].holes.length > nves) {
+          nves = frames[frame].holes.length;
+        }
+        make_VEs(nves);
+        console.log("ves: "+ves.length);
+
+        place_marker = 5;
+        ctx = document.getElementById("myCanvas").getContext('2d');
+        // draw_adjacent(ctx);
+        draw_frame(ctx, frame, frame_width, frame_height);
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Comic frame testing</h1>
+
+    <form>
+      Minimum Number of Visual Elements: <input type="text" value="2" id="NVEs"/><br/>
+      Frame: <select type="text" id="frame">
+                <option value="blank">blank</option>
+                <option value="touching">touching</option>
+                <option value="monolog">monolog</option>
+                <option value="carry">carry</option>
+                <option value="stack">stack</option>
+             </select>
+    </form>
+
+    <p><a href="#" onClick="add_comic();">Click to draw</a></p>
+
+    <pre id="comic"></pre>
+    
+  </body>
+</html>

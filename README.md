@@ -1,9 +1,7 @@
 # Comic Generator
 
-Current prototype spits out a comic in the following format:
+Example output:
 
-    - ComicGen.gen [] 2;
-    val it =
       [({elements=[1,2],name="aid"},Add),
       ({elements=[3,1,2],name="monolog"},Subtract),
       ({elements=[3,2],name="carry"},Moment),
@@ -16,5 +14,6 @@ Current prototype spits out a comic in the following format:
       : (ComicGen.panel * ComicGen.transition) list
 
 Transition types Moment, Add, Subtract, Meanwhile, RendezVous, and End are
-chosen randomly, and the next panel is generated based on it plus the comic
-history.
+generated as a random sequence, or constrained by a grammar. Frames are
+generated to fit each transition type or initial position.
+
