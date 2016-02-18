@@ -1,0 +1,52 @@
+\section{System Description}
+
+XXX overview our approach
+
+% XXX how to make this a heading that looks different from a section
+% heading?
+\subsection{Visual elements, frames, and transitions}
+
+% XXX edit from blog post text
+
+Visual element (VE): unique identifier from an infinite set, mappable to
+visually distinct image components, such as anthropomorphic "characters,"
+scenery, and geometric shapes.
+
+Frame: a named panel outline dictating a minimum number of visual elements
+requires to fill it in, e.g. "give" requires three visual elements (a
+giver, a gift, and a giftee). The frame should contain instructions for
+visual rendering, e.g. an image with three holes for the spatial positions
+of each element.
+
+Panel: a frame with its holes filled by visual elements, and optionally
+some additional VEs (e.g. observers carried over from previous panels).
+
+Modifier: visual details overlaid on frames and VEs to add semantic
+coherence to the comic, such as floating emotes, facial expressions, motion
+lines, word balloons, and other text.
+
+\subsection{Formal Transition Types}
+
+% XXX format and edit; add sentences...
+
+Moment: keep VEs, change frame and/or modifiers.
+
+Add: introduce a VE that didn't appear in the previous panel (but might
+have appeared earlier).
+
+Subtract: remove a VE from the previous panel (and potentially choose a new
+frame).
+
+Meanwhile: choose a new frame and only show VEs that didn't appear in the
+previous panel, generating new VEs if necessary.
+
+Rendez-vous: choose a new frame and fill it with any combination of
+previously-appearing VEs. Generate new VEs only when there aren't enough
+previous VEs to fill the frame.
+
+
+\subsection{Example}
+
+\section{Implementation}
+
+\section{Output}
