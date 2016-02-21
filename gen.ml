@@ -64,6 +64,22 @@ type comic = (panel * transition) list
     in
     split l idx [] 0
 
+  let rec random_subset l =
+    match l with 
+    [] -> []
+    | (x::xs) -> if Random.int 2 > 0 
+                 then x::(random_subset xs) 
+                 else (random_subset xs);;
+
+  let rec rand_subset_of_size l size =
+    match size with
+      0 -> []
+    | n ->
+        let (l', x) = randSplit l
+        in x::(rand_subset_of_size l' (n-1))
+
+        (* XXX *)
+
   let hasAtLeastNHoles n {nholes} = nholes >= n
   let hasAtMostNHoles n {nholes} = nholes <= n
 
@@ -157,9 +173,14 @@ type comic = (panel * transition) list
              let (elts, newTotal) = pickRandomVEs skipVEs nholes totalNVEs in
                ({name; elements=elts}, newTotal)
          | RendezVous ->
-             let {name; nholes} = pickRandomFrame () in
-             let (elts, newTotal) = pickRandomVEs allPrior nholes totalNVEs in
-               ({name; elements=elts}, newTotal)
+             (* CRM: changed 2/21/2016: *)
+             (* generate a random subset of prior ves
+                generate a frame w/at most that many holes
+             *)
+             let size = rand_range 1 (List.length allPrior) in
+             let elts = rand_subset_of_size allPrior size in
+             let {name; nholes} = pickFrame size in
+               ({name; elements=elts}, totalNVEs)
          | End -> ({name="blank"; elements=[]}, totalNVEs)
 
   let fillFrame ({name; nholes}: frame) (visual_elts : ve list) : panel =
