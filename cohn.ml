@@ -3,6 +3,7 @@ let () = Random.full_init [|1; 13123|]
 
 type role =
   Establisher | Initial | Prolongation | Peak | Release
+  [@@deriving yojson]
 
 type grammar =
   Seq of grammar * grammar | Optional of grammar | NT of role

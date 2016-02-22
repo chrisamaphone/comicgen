@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>js_of_ocaml example</title>
+    <title>Comic generator interface</title>
     <script type="text/javascript" src="./bind_gen.js"></script>
     <script type="text/javascript">
 
@@ -237,15 +237,17 @@
         max = parseInt(document.getElementById('max').value) - 1;
 
         comicSpecString = "";
-        if (document.getElementById('constrained').checked) {
+        var constrained = document.getElementById('constrained').checked;
+        if (constrained) {
           comicSpecString = comic.gen_constrained(nves);
+          arcSpec = JSON.parse(comicSpecString);
+          comicSpec = arcSpec.comic;
         } else {
           comicSpecString = comic.gen(nves, min, max);
+          comicSpec = JSON.parse(comicSpecString)
         }
         document.getElementById('output').innerHTML =
           comicSpecString
-
-        comicSpec = JSON.parse(comicSpecString)
 
         comicDOMelement = document.getElementById('comic');
         comicDOMelement.innerHTML = ""
@@ -274,12 +276,12 @@
   </head>
   <body>
     <h1>Comics generator</h1>
-    <p>This is an interface
-    to <a href="https://github.com/chrisamaphone/comicgen/">this
-    code</a>,
-    see <a href="http://lambdamaphone.blogspot.fr/2015/12/generativity-interpretation-study-of.html">this
-    blog post</a> for details.</p>
-
+    <p>An interface
+    to <a href="https://github.com/chrisamaphone/comicgen/">an abstract comic
+    generator</a>.
+    <a
+    href="http://lambdamaphone.blogspot.fr/2015/12/generativity-interpretation-study-of.html">This
+    blog post</a> has some details.</p>
 
     <form>
       Number of starting visual elements: <input type="text" value="4" id="NVEs"/><br/>
@@ -288,7 +290,7 @@
       Constrain?: <input type="checkbox" id="constrained"/><br/>
     </form>
 
-    <p><a href="#" onClick="add_comic_JSON();">Click to generate stuff</a></p>
+    <p><a href="#" onClick="add_comic_JSON();">Click to generate</a></p>
     <pre id="output"></pre>
 
     <pre id="comic"></pre>

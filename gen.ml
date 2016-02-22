@@ -20,6 +20,8 @@ type frame = {name: string; nholes:int}
       {name="fall"; nholes=1}
     ]
 
+open Cohn
+
 type panel = {name:string; elements : ve list}
   [@@deriving yojson]
 
@@ -218,8 +220,6 @@ type comic = (panel * transition) list
   (* first steps of a refactor where transitions are gen'd first,
      then panels. *)
 
-open Cohn
-
   let rec gen_transitions min max n_so_far : transition list =
     if n_so_far + 1 > max then [End]
     else 
@@ -280,10 +280,11 @@ open Cohn
       | (Prolongation, Prolongation) -> [Moment; Subtract; Add]
       | (Prolongation, Peak) -> [Subtract; Add; RendezVous]
       | (Initial, Peak) -> [Subtract; Add; Meanwhile; RendezVous]
-      | (Peak, Release) -> [Subtract; Add; RendezVous; End]
+      | (Peak, Release) -> [Subtract; Add; RendezVous]
       | _ -> [End] (* error! *)
 
 
+  (*
   let pickConstrainedFrame nves role : frame =
     let candidates =
       List.filter 
@@ -291,6 +292,7 @@ open Cohn
       available_frames
     in
       randElt candidates
+  *)
 
   (* Generates a *reversed* transition list based on the role sequence
       "roles" *)
@@ -310,9 +312,12 @@ open Cohn
     let ts = List.rev ts in
       gen_with_transitions [] nves ts
 
-  let gen_constrained nves : comic =
+  type arc_comic = {sequence : role list; comic : comic}
+  [@@deriving yojson]
+
+  let gen_constrained nves : arc_comic =
     let seq = gen_seq () in
-    gen_constrained_by_seq nves seq
+    {sequence=seq; comic=gen_constrained_by_seq nves seq}
 
   (*
   let rec gen_constrained (soFar:comic) (nves:int) panelRoles : comic =
