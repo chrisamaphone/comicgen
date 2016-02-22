@@ -1,29 +1,42 @@
 \section{System Description}
 
-XXX overview our approach
+Our approach to generating visual narratives begins as a linear
+process that selects next comic panels based on the contents of previous
+panels, choosing randomly among indistinguishably-valid choices.
+The concepts we represent formally are {\em transitions}, {\em frames}, and
+{\em visual elements}, which we define below.
 
 % XXX how to make this a heading that looks different from a section
 % heading?
-\subsection{Visual elements, frames, and transitions}
+% \subsection{Visual elements, frames, and transitions}
 
-% XXX edit from blog post text
+A {\bf visual element (VE)} is a unique identifier from an infinite set,
+each of which is possible to map to a distinct visual representation.
+We do not explicitly tag visual elements as specifically characters, props,
+or scenery, making the representation agnostic to which of these narrative
+interpretations will apply. In the visual rendering of our comics, we
+represent VEs as random combinations of shape, color, and size, supplying
+additional inputs to the human cognitive processes that may interpret these
+elements' narrative role.
 
-Visual element (VE): unique identifier from an infinite set, mappable to
-visually distinct image components, such as anthropomorphic "characters,"
-scenery, and geometric shapes.
+A {\bf frame} is a panel template; at the abstract generation level, it
+includes an identifier or set of tags and a minimum number of required
+visual elements. The reason a frame specifies a {\em minimum} number of VEs
+is to allow for augmentation of the frame with pre-existing elements: for
+example, the {\em monologue} frame requires at least one visual element,
+indicating a single, central focal point, but other visual elements may be
+included as bystanding characters or scenery elements.
+At the rendering level, a frame includes instructions for where in the
+panel to place supplied visual elements.
 
-Frame: a named panel outline dictating a minimum number of visual elements
-requires to fill it in, e.g. "give" requires three visual elements (a
-giver, a gift, and a giftee). The frame should contain instructions for
-visual rendering, e.g. an image with three holes for the spatial positions
-of each element.
+A {\bf panel} is a frame instantiated by specific visual elements.
 
-Panel: a frame with its holes filled by visual elements, and optionally
-some additional VEs (e.g. observers carried over from previous panels).
+% Modifier: visual details overlaid on frames and VEs to add semantic
+% coherence to the comic, such as floating emotes, facial expressions, motion
+% lines, word balloons, and other text.
 
-Modifier: visual details overlaid on frames and VEs to add semantic
-coherence to the comic, such as floating emotes, facial expressions, motion
-lines, word balloons, and other text.
+Finally, a {\bf transition} is (XXX continue)
+
 
 \subsection{Formal Transition Types}
 
