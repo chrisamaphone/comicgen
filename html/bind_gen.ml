@@ -8,6 +8,6 @@ let () =
     method gen_constrained nves =
       Printf.eprintf "Call: nves=%d" nves;
       let comic = Gen.gen_constrained nves in
-      Js.string (Yojson.Safe.pretty_to_string (Gen.comic_to_yojson comic))
+      Js.string (Yojson.Safe.pretty_to_string (Gen.arc_comic_to_yojson comic))
 
   end
