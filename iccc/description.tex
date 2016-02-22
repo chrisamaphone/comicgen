@@ -83,7 +83,27 @@ frame to accommodate them.
 
 \subsection{Implementation}
 
-(XXX)
+Inputs: length constraint, number of starting visual elements
+Output: sequence of panels stitched together with transition names
+
+Algorithm:
+\begin{itemize}
+\item Generate transition sequence based on length constraints
+\item Feed transition sequence and starting VEs to panel selector
+\item Select next frame and VE set for each new panel based on each
+transition
+\end{itemize}
+
+Web front-end:
+\url{http://www.cs.cmu.edu/~cmartens/comicgen}
+
+XXX Standard ML, JS of Ocaml, JavaScript
+
+Interface:
+\begin{figure}[h]
+\includegraphics[width=0.5\textwidth]{comicgen-interface.png}
+\end{figure}
+
 
 \section{Generator Output}
 
@@ -91,19 +111,48 @@ frame to accommodate them.
 
 \subsection{Example}
 
-XXX flesh out:
-\begin{itemize}
-\item Show the interface
-\item Show an example of output, both in abstract and rendered form
-\end{itemize}
-
 \begin{figure}
 \includegraphics[width=0.5\textwidth]{comicgen-output-1.png}
 \end{figure}
 
 \subsection{Constraining generation with Cohn grammars}
 
+Instead of transition types, Cohn's grammar of comics consists of {\em
+roles} that each panel plays in the narrative. These roles are {\bf
+establisher}, {\bf initial}, {\bf prolongation}, {\bf peak}, and {\bf}
+release --- similar to the dramatic arc of standard Western narrative
+theories. Formally, Cohn gives the following grammar for sequences of panel
+roles:
 
+(XXX paste this in)
+
+Cohn grammars give a holistic structure to the desired output of a comic,
+but, like McCloud transitions, they do not inform at a syntactic level how
+each panel might be constructed. Our approach is to use Cohn grammars to
+guide the selection of syntactically-defined transitions, and, in turn,
+realize Cohn's semantic panel roles in terms of the panel's syntactic
+relationship to prior panels.
+
+In particular, we enumerate every possible role bigram in Cohn's grammar,
+such as {\em initial to prolongation}, {\em prolongation to peak}, and so
+on, and describe sets of transition types that could plausibly model the
+relationship.
+
+(XXX explain below code)
+
+\begin{Verbatim}[fontsize=\small]
+let valid_transitions roles =
+      match roles with
+        (Establisher, Initial) -> [Moment; Subtract; Add; RendezVous]
+      | (Establisher, Prolongation) -> [Moment; Subtract; Add]
+      | (Establisher, Peak) -> [Add; Meanwhile]
+      | (Initial, Prolongation) -> [Moment; Subtract; Add]
+      | (Prolongation, Prolongation) -> [Moment; Subtract; Add]
+      | (Prolongation, Peak) -> [Subtract; Add; RendezVous]
+      | (Initial, Peak) -> [Subtract; Add; Meanwhile; RendezVous]
+      | (Peak, Release) -> [Subtract; Add; RendezVous]
+      | _ -> [End] (* error! *)
+\end{Verbatim}
 
 \subsection{Example of constrained output}
 
