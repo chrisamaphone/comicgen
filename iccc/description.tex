@@ -101,9 +101,9 @@ necessary.
 \end{itemize}
 
 In addition to our OCaml implementation, which can be found on
-GitHub \footnote{\url{http://www.github.com/chrisamaphone/comicgen}}, we
-have implemented a web front-end in JavaScript
-\footnote{\url{http://www.cs.cmu.edu/~cmartens/comicgen}}. This front-end
+GitHub,\footnote{\url{http://www.github.com/chrisamaphone/comicgen}} we
+have implemented a web front-end in JavaScript.\footnote{
+\url{http://www.cs.cmu.edu/~cmartens/comicgen}} This front-end
 assigns each frame type to a set of coordinates given by percentage of the
 vertical and horizontal panel size, then renders panels by placing visual
 elements at those coordinates. Visual elements are represented by randomly
@@ -178,13 +178,17 @@ relationship. This mapping is determined by the code below:
 \begin{Verbatim}[fontsize=\scriptsize]
 let valid_transitions roles =
   match roles with
-    (Establisher, Initial) -> [Moment; Subtract; Add; RendezVous]
-  | (Establisher, Prolongation) -> [Moment; Subtract; Add]
+    (Establisher, Initial) -> 
+      [Moment; Subtract; Add; RendezVous]
+  | (Establisher, Prolongation) -> 
+      [Moment; Subtract; Add]
   | (Establisher, Peak) -> [Add; Meanwhile]
   | (Initial, Prolongation) -> [Moment; Subtract; Add]
-  | (Prolongation, Prolongation) -> [Moment; Subtract; Add]
+  | (Prolongation, Prolongation) -> 
+      [Moment; Subtract; Add]
   | (Prolongation, Peak) -> [Subtract; Add; RendezVous]
-  | (Initial, Peak) -> [Subtract; Add; Meanwhile; RendezVous]
+  | (Initial, Peak) -> 
+      [Subtract; Add; Meanwhile; RendezVous]
   | (Peak, Release) -> [Subtract; Add; RendezVous]
   | _ -> [End] (* error! *)
 \end{Verbatim}
