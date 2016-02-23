@@ -38,7 +38,7 @@ Finally, a {\bf transition} is a specification for how a panel should be
 formed as the next panel in a sequence, which we describe formally below.
 
 Transition types were first described by
-McCloud~\cite{mcCloud1993understanding} % XXX as a means of analyzing
+McCloud~\cite{mcCloud1993understanding} as a means of analyzing
 comics. He gave an account of transitions including {\em moment-to-moment},
 {\em subject-to-subject}, and {\em aspect-to-aspect}, referring to changes
 in temporal state, focal subjects, and spatial point-of-view. As Cohn (XXX
@@ -121,17 +121,16 @@ An example of the generator's output can be seen in Figure~\ref{fig:out1}.
 Generating random transition sequences may result in nonsensical output,
 such as ending a comic with a ``meanwhile'' frame in which completely new
 visual elements are introduced at the end of the comic, but not connected
-back to previous elements (see Figure XXX for an example). 
-
+back to previous elements; see Figure~\ref{fig:outbad} for an example. 
 
 \begin{figure}
 \caption{Example of underconstrained output.}
 \includegraphics[width=0.5\textwidth]{comicgen-underconstrained-2.png}
-\label{fig:out1}
+\label{fig:outbad}
 \end{figure}
 
 In an attempt to understand the global structure of comic panel sequences,
-Neil Cohn et al. (XXX cite) investigate the {\em linguistic structure} of
+Cohn et al. (XXX cite) investigate the {\em linguistic structure} of
 visual narratives. They claim that understandable comics follow a grammar
 that organizes its global structure. Instead of transition types, Cohn's
 grammar of comics consists of {\em roles} that each panel plays in the
@@ -141,15 +140,22 @@ standard narrative patterns including the Western ``initial, peak,
 release'' dramatic arc. Formally, Cohn gives the following grammar 
 as a general template for sequences of panel roles:
 
-(XXX paste it in here)
+{\it
+(Establisher) -- (Initial (Prolongation)) -- Peak -- (Release)}
 
-(XXX name?) built a generator based purely on this
-grammatical structure, picking hand-annotated panels for each of an {\em
-initial}, {\em peak}, and {\em release} slot in the comic. However, this
-generation scheme does not manipulate the internal structure of the comic
-panels, allowing for less variability in the output than our scheme with
-visual elements and frames. Additionally, codifying the syntactic structure
-of individual panels allows us to characterize {\em relatedness} between
+Symbols in parentheses are optional. In our expression of this grammar (and
+in several of Cohn's examples), we also assume that prolongations may occur
+arbitrarily many times in sequence.
+
+Grossman built a generator based purely on Cohn's arc grammar,\footnote{
+  \url{http://www.suzigrossman.com/fineart/conceptual/Sunday_Comics_Scrambler}
+}
+picking hand-annotated panels for each of an {\em initial},
+{\em peak}, and {\em release} slot in the comic. However, this generation
+scheme does not manipulate the internal structure of the comic panels,
+allowing for less variability in the output than our scheme with visual
+elements and frames. Additionally, codifying the syntactic structure of
+individual panels allows us to characterize {\em relatedness} between
 panels in the manner of Saraceni (XXX cite). In our second iteration of the
 generator, we combine two approaches to discourse, using {\em global} Cohn
 grammars to guide the {\em local} selection of syntactically-defined
@@ -167,9 +173,7 @@ transitions.
 In particular, we enumerate every possible role bigram in Cohn's grammar,
 such as {\em initial to prolongation}, {\em prolongation to peak}, and so
 on, and describe sets of transition types that could plausibly model the
-relationship.
-
-(XXX explain below code)
+relationship. This mapping is determined by the code below:
 
 \begin{Verbatim}[fontsize=\scriptsize]
 let valid_transitions roles =
@@ -185,12 +189,22 @@ let valid_transitions roles =
   | _ -> [End] (* error! *)
 \end{Verbatim}
 
-XXX talk about Saraceni relatedness
+XXX describe randomly generating an instance of the grammar and feeding it
+to the otherwise-same generator
 
-XXX discuss output range
+Examples of the constrained generator's output can be found in
+Figure~\ref{fig:outgood}.
 
 \begin{figure}
+\caption{Example of grammatically-constrained output.}
+
 \includegraphics[width=0.5\textwidth]{comicgen-output-constrained-1.png}
+
+Another example:
+
+\includegraphics[width=0.5\textwidth]{comicgen-output-4.png}
+
+\label{fig:outgood}
 \end{figure}
 
 
