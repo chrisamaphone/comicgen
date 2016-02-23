@@ -83,55 +83,86 @@ frame to accommodate them.
 
 \subsection{Implementation}
 
-Inputs: length constraint, number of starting visual elements
-Output: sequence of panels stitched together with transition names
+Our generator accepts as inputs length constraints (minimum and maximum)
+and a number of VEs to start with in the first panel. Its output is a
+sequence of panels (frame names and VE sets) together with a record of the
+transitions that connect them.
 
-Algorithm:
+The generation algorithm is:
 \begin{itemize}
-\item Generate transition sequence based on length constraints
-\item Feed transition sequence and starting VEs to panel selector
-\item Select next frame and VE set for each new panel based on each
-transition
+\item Generate transition sequence by choosing transitions uniformly at
+random, constrained by supplied minimum and maximum length
+\item Generate unique identifiers matching the number of specified starting
+VEs
+\item Feed transition sequence and starting VEs to panel sequencer, which
+selects a next frame and VE set for each new panel based on each
+transition type's definition (described above). Generate new VEs when
+necessary.
 \end{itemize}
 
-Web front-end:
-\url{http://www.cs.cmu.edu/~cmartens/comicgen}
-
-XXX Standard ML, JS of Ocaml, JavaScript
-
-Interface:
-\begin{figure}[h]
-\includegraphics[width=0.5\textwidth]{comicgen-interface.png}
-\end{figure}
-
-
-\section{Generator Output}
-
-(XXX)
-
-\subsection{Example}
+In addition to our OCaml implementation, which can be found on
+GitHub \footnote{\url{http://www.github.com/chrisamaphone/comicgen}}, we
+have implemented a web front-end in JavaScript
+\footnote{\url{http://www.cs.cmu.edu/~cmartens/comicgen}}. This front-end
+assigns each frame type to a set of coordinates given by percentage of the
+vertical and horizontal panel size, then renders panels by placing visual
+elements at those coordinates. Visual elements are represented by randomly
+generated combinations of size, shape (circle or rectangle), and color.
+An example of the generator's output can be seen in Figure~\ref{fig:out1}.
 
 \begin{figure}
-\includegraphics[width=0.5\textwidth]{comicgen-output-1.png}
+\caption{Example of output.}
+\includegraphics[width=0.5\textwidth]{comicgen-unconstrained-ok.png}
+\label{fig:out1}
 \end{figure}
 
-\subsection{Constraining generation with Cohn grammars}
+\section{Constraining generation with Cohn grammars}
 
-Instead of transition types, Cohn's grammar of comics consists of {\em
-roles} that each panel plays in the narrative. These roles are {\bf
-establisher}, {\bf initial}, {\bf prolongation}, {\bf peak}, and {\bf}
-release --- similar to the dramatic arc of standard Western narrative
-theories. Formally, Cohn gives the following grammar for sequences of panel
-roles:
+Generating random transition sequences may result in nonsensical output,
+such as ending a comic with a ``meanwhile'' frame in which completely new
+visual elements are introduced at the end of the comic, but not connected
+back to previous elements (see Figure XXX for an example). 
 
-(XXX paste this in)
 
-Cohn grammars give a holistic structure to the desired output of a comic,
-but, like McCloud transitions, they do not inform at a syntactic level how
-each panel might be constructed. Our approach is to use Cohn grammars to
-guide the selection of syntactically-defined transitions, and, in turn,
-realize Cohn's semantic panel roles in terms of the panel's syntactic
-relationship to prior panels.
+\begin{figure}
+\caption{Example of underconstrained output.}
+\includegraphics[width=0.5\textwidth]{comicgen-underconstrained-2.png}
+\label{fig:out1}
+\end{figure}
+
+In an attempt to understand the global structure of comic panel sequences,
+Neil Cohn et al. (XXX cite) investigate the {\em linguistic structure} of
+visual narratives. They claim that understandable comics follow a grammar
+that organizes its global structure. Instead of transition types, Cohn's
+grammar of comics consists of {\em roles} that each panel plays in the
+narrative. These roles are {\bf establisher}, {\bf initial}, {\bf
+prolongation}, {\bf peak}, and {\bf release}, which allow the formation of
+standard narrative patterns including the Western ``initial, peak,
+release'' dramatic arc. Formally, Cohn gives the following grammar 
+as a general template for sequences of panel roles:
+
+(XXX paste it in here)
+
+(XXX name?) built a generator based purely on this
+grammatical structure, picking hand-annotated panels for each of an {\em
+initial}, {\em peak}, and {\em release} slot in the comic. However, this
+generation scheme does not manipulate the internal structure of the comic
+panels, allowing for less variability in the output than our scheme with
+visual elements and frames. Additionally, codifying the syntactic structure
+of individual panels allows us to characterize {\em relatedness} between
+panels in the manner of Saraceni (XXX cite). In our second iteration of the
+generator, we combine two approaches to discourse, using {\em global} Cohn
+grammars to guide the {\em local} selection of syntactically-defined
+transitions.
+
+% What I want to say is: we don't just benefit from Cohn's work;
+% he benefits from ours, because we're operationalizing semantic panel
+% roles in terms of the panel's syntactic relationship to prior panels.
+% I.e. in the linguistic metaphor, we're rejecting "panels as words" and
+% instead treating "panels as utterances" and their constituent VEs as
+% words.
+% Maybe it's worth suggesting that panels themselves could obey a grammar,
+% rather than haphazardly plugging VEs into different frame positions?
 
 In particular, we enumerate every possible role bigram in Cohn's grammar,
 such as {\em initial to prolongation}, {\em prolongation to peak}, and so
@@ -140,22 +171,27 @@ relationship.
 
 (XXX explain below code)
 
-\begin{Verbatim}[fontsize=\small]
+\begin{Verbatim}[fontsize=\scriptsize]
 let valid_transitions roles =
-      match roles with
-        (Establisher, Initial) -> [Moment; Subtract; Add; RendezVous]
-      | (Establisher, Prolongation) -> [Moment; Subtract; Add]
-      | (Establisher, Peak) -> [Add; Meanwhile]
-      | (Initial, Prolongation) -> [Moment; Subtract; Add]
-      | (Prolongation, Prolongation) -> [Moment; Subtract; Add]
-      | (Prolongation, Peak) -> [Subtract; Add; RendezVous]
-      | (Initial, Peak) -> [Subtract; Add; Meanwhile; RendezVous]
-      | (Peak, Release) -> [Subtract; Add; RendezVous]
-      | _ -> [End] (* error! *)
+  match roles with
+    (Establisher, Initial) -> [Moment; Subtract; Add; RendezVous]
+  | (Establisher, Prolongation) -> [Moment; Subtract; Add]
+  | (Establisher, Peak) -> [Add; Meanwhile]
+  | (Initial, Prolongation) -> [Moment; Subtract; Add]
+  | (Prolongation, Prolongation) -> [Moment; Subtract; Add]
+  | (Prolongation, Peak) -> [Subtract; Add; RendezVous]
+  | (Initial, Peak) -> [Subtract; Add; Meanwhile; RendezVous]
+  | (Peak, Release) -> [Subtract; Add; RendezVous]
+  | _ -> [End] (* error! *)
 \end{Verbatim}
 
-\subsection{Example of constrained output}
+XXX talk about Saraceni relatedness
 
+XXX discuss output range
+
+\begin{figure}
+\includegraphics[width=0.5\textwidth]{comicgen-output-constrained-1.png}
+\end{figure}
 
 
 
