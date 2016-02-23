@@ -1,5 +1,3 @@
-% This file is iccc.tex.  It contains the formatting instructions for and acts as a template for submissions to ICCC.  It borrows liberally from the AAAI and IJCAI formats and instructions.  It uses the files iccc.sty, iccc.bst and iccc.bib, the first two of which also borrow liberally from the same sources.
-
 \documentclass[letterpaper]{article}
 \usepackage{iccc}
 
@@ -10,8 +8,9 @@
 \usepackage{graphicx}
 \usepackage{url}
 \usepackage{fancyvrb}
+\usepackage{paralist}
 
-% ====================== CUSTOM COMMANDS =======================
+% ====================== CUSTOM COMMANDS 
 %\DeclareMathAlphabet\mathbfcal{OMS}{cmsy}{b}{n}
 \newcommand{\dref}[1]{Definition~\ref{#1}}
 \newcommand{\eref}[1]{Equation~\ref{#1}}
@@ -28,18 +27,25 @@
 % Syntax: \note{%text%}{%text%}
 \def\note#1#2{\noindent {\color{red} {[\bf{#1}: {\it #2}]}}}
 
+% ====================== DOCUMENT STYLING
+\hyphenpenalty=5000
 
 
-
+% ====================== DOCUMENT METADATA
 \pdfinfo{
 	/Title (Operationalizing Comic Panel Transitions)
 	/Subject (Proceedings of ICCC)
 	/Author (Chris Martens, Rogelio E. Cardona-Rivera)
 }
-% The file iccc.sty is the style file for ICCC proceedings.
 %
-\title{A Discourse-first Approach to Visual Narrative Generation through Operationalizing Comic Panel Transitions \\
-Paper type: System Description}
+\title{
+	A Discourse-first Approach to Visual Narrative Generation 
+	through Operationalizing Comic Panel Transitions \break
+	Paper type: System Description
+%	Toward Computational Comic Generation: \break
+%	Exploring a Discourse-first Approach to Visual Narrative \break
+%	Paper type: System Description
+}
 \author{
 	Chris Martens\\
 	Expressive Intelligence Studio\\
