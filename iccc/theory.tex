@@ -3,17 +3,17 @@
 
 The computational generation of comics presents a novel challenge. Comics 
 share structural similarity to written text~\cite{saraceni2016relatedness}: 
-they are both made up of individual elements (sentences in text, frames in 
-comics), delimited by special-purpose symbols (full stops in text, frame 
+they are both made up of individual elements (sentences in text, panels in 
+comics), delimited by special-purpose symbols (full stops in text, panel 
 borders in comics), which can be easily identified, and which can contain a 
 variable amount of information. However, unlike text, comics afford an additional \emph{pictorial} dimension through which to express information. To 
 \citeA{cohn2013visual}, comics are one instance of the more broader 
 \emph{theory of visual language}, which itself is used to communicate via
 a palette of visual elements and their spatial relationships to one another,
 e.g. their relative size, rotation, horizontal and vertical juxtaposition, 
-and distance. While in general comics offer two authorship affordances 
-(textual and visual language), in this work we are concerned only with 
-the pictorial dimension.
+and distance. While in general comics offer two dimensions of authorship 
+affordances (textual and visual language), in this work we are concerned 
+only with the pictorial dimension.
 
 One interesting and paradoxical aspect of purely-visual comics is how
 constrained they for conveying narrative structure. The constraint is 
@@ -25,14 +25,40 @@ the first concern) a potential story consumer could be potentially
 disengaged at the prospect of having to parse an overwhelming amount of
 visual detail. There thus exists a tacit expectation on behalf of story
 consumers that authors will make their contributions to the narrative arc
-as brief and relevant as they need to be, in a manner parallel to the
-expected conduct of people engaged in cooperative conversation as outlined 
-by \citeA{grice1975logic}.
+as brief and relevant as they need to be. As \citeA{murray2011why} states:
+%
+\begin{quote}
+	In a mature medium nothing happens, nothing is brought on stage (or 
+	screen or comic book panel or described in prose) that does not in
+	some way further the action. Whatever the viewer is invited to direct
+	attention to is something that further defines the role (character) 
+	or the function (dramatic beat).
+\end{quote}
+%
+These expectations give rise to narrative devices such as \emph{Chekhov's gun},\footnote{\url{http://tvtropes.org/pmwiki/pmwiki.php/Main/ChekhovsGun}} and a
+related counterpart, the \emph{red herring}.\footnote{\url{http://tvtropes.org/pmwiki/pmwiki.php/Main/RedHerring}}
+
+By the same token, authors construct narratives in a way that
+facilitates their comprehension by the audience. People learn to optimize 
+their consumption of relevant information~\cite{pirolli2007information}, 
+and work to construct inferences~\cite{magliano2016filling} about story 
+content in the liminal spaces of discourse (in between sentences in text, 
+and in between panels in comics); inferences of story content are 
+constructed when they are \emph{needed} for comprehension, and 
+\emph{enabled} by what has been told thus far~\cite{myers1987degree}.
+
+All told, the dynamic between story authors and consumers parallels the
+expected conduct of people engaged in cooperative conversation as outlined
+by the philosopher of language \citeA{grice1975logic}.
+
+\note{RCR}{An example comic here would be fantastic.}
 
 Thus, for the enterprise of computational narratology, it seems prudent to
-understand and computationally model the constraints of discourse, since 
-it is the primary point of contact with the narrative artifact. While we 
-acknowledge that story structure is important for 
+understand and computationally model the constraints and effects of narrative
+discourse, since (as the primary point of contact with the narrative artifact) 
+narrative discourse carries with it expectations and conventions that ultimate
+effect how story consumers understand the narrative. While we 
+acknowledge that coherent story structure is important for 
 comprehension~\cite{graesser2002how}, we feel that the story exists primarily
 in the head of the narrative consumer, and that story structure is recovered 
 by the consumer insofar it is afforded by the discourse structure. In particular
