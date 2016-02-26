@@ -2,29 +2,35 @@
 <html>
   <head>
     <title>Comic generator interface</title>
-      <script type="text/javascript" src="./js/bind_gen.js"></script>
-      <script type="text/javascript" src="js/comicgen.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <script type="text/javascript" src="./js/bind_gen.js"></script>
+    <script type="text/javascript" src="js/comicgen.js"></script>
   </head>
   <body>
-    <h1>Comics generator</h1>
-    <p>An interface
-    to <a href="https://github.com/chrisamaphone/comicgen/">an abstract comic
-    generator</a>.
-    <a
-    href="http://lambdamaphone.blogspot.fr/2015/12/generativity-interpretation-study-of.html">This
-    blog post</a> has some details.</p>
-
-    <form>
-      Number of starting visual elements: <input type="text" value="4" id="NVEs"/><br/>
-      Min panels: <input type="text" value="3" id="min"/><br/>
-      Max panels: <input type="text" value="4" id="max"/><br/>
-      Constrain?: <input type="checkbox" id="constrained"/><br/>
-    </form>
-
-    <p><a href="#" onClick="add_comic_JSON();">Click to generate</a></p>
-    <pre id="output"></pre>
-
-    <pre id="comic"></pre>
-    
+    <h1>Comics Generator</h1>
+      <p>
+          An interface to 
+          <a href="https://github.com/chrisamaphone/comicgen/">
+              an abstract comic generator
+          </a>.
+          
+          <a href="http://lambdamaphone.blogspot.fr/2015/12/generativity-interpretation-study-of.html">
+              This blog post
+          </a> 
+          has some details.
+      </p>
+      <form>
+          Number of starting visual elements: <input type="text" value="4" id="NVEs"/><br/>
+          Min panels: <input type="text" value="3" id="min"/><br/>
+          Max panels: <input type="text" value="4" id="max"/><br/>
+          Constrain? <input type="checkbox" id="constrained"/><br/>
+      </form>
+      <p>
+          <a href="#" onClick="add_comic_JSON();">
+              Click to generate
+          </a>
+      </p>
+      <pre id="output"></pre>
+      <pre id="comic"></pre>
   </body>
 </html>
