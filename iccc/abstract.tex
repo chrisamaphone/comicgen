@@ -1,30 +1,27 @@
-Comics use sequences of still, two-dimensional visual stimuli to tell
-stories, and they are deeply entwined with humanity's creative history.
-While there is prior work on computationally generating discourse
-(conveyance of narrative) for textual stories, few attempts have been made
-to target comics, which carry distinct challenges and affordances, as a
-discourse language.  Standard pipeline-based approaches to narrative
-generation, wherein a discourse is configured only after a fabula has been
-fixed, do not map well onto the affordances of purely visual panel
-sequences.
-
-% XXX can we back up this claim more strongly?
-
-% Prior efforts toward comic-authoring computer programs mainly
-% conform to fixed panel contents which cannot be flexibly rearranged
-% while retaining narrative coherence.
-
-% solution we propose
-We propose a {\em discourse-first} scheme for generating comics, including novel configurations
-of panel contents, by combining a
-bottom-up panel sequencer inspired by McCloud's taxonomy of panel
-transitions and a top-down grammar of comic arcs devised by Cohn.
+% Narrative generation is important
+Narrative generation enables a well-documented range of opportunities for
+understanding the creative act of storytelling and employing it in digital
+applications.
+% but standard pipeline model has limits
+Prior approaches have mostly converged on a ``pipeline'' model, wherein
+fabula (event structure) is gengerated first, and discourse (means of
+narrative delivery to an audience) is considered after the fact, mapping
+individual fabula events to discourse elements. However, Ronfard and Szilas have
+argued that the pipeline model severely limits
+% our approach 
+narrative possibilities. We investigate a new approach to
+narrative generation based purely on discourse theories. In particular, 
+% Comics offer good discourse theory
+because {\em comics} offer a rich body of discourse theory, we built a
+comic generator to study narrative generation.  In contrast to prior comic
+generation work, we generate panels down to the level of visual element
+positions within panels, rather than rearranging pre-existing panels.  Our
+approach is based on leading discourse theories for comics given by McCloud
+(panel transitions) and Cohn (narrative grammar for comics).
 % results
-Our approach yields a flexible algorithm for comic generation whose output
-can be rendered with a number of visual palettes, for which we have built
-one proof-of-concept example and observed a wide range of variability in
-output. Our efforts represent a first step toward robust comic generation
-and provide a platform for analyzing and evaluating the validity of visual
-discourse theories.
+Our contributions are a proof-of-concept generator with a wide range of
+abstract comic output, a computational realization of McCloud's and Cohn's
+comics theories, and a modular algorithm that provides a platform for
+analyzing and evaluating the validity of visual discourse theories.
 
 
