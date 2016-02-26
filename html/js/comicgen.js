@@ -275,7 +275,7 @@ function add_comic_JSON() {
         comicSpec = JSON.parse(comicSpecString)
     }
     document.getElementById('output').innerHTML =
-        comicSpecString
+        'Source: <br>'+comicSpecString
 
     comicDOMelement = document.getElementById('comic');
     comicDOMelement.innerHTML = ""
