@@ -1,32 +1,30 @@
-% State of the art
-Storytelling through images is a fundamental aspect of creativity, to which
-computational narrative generation lends understanding by operationalizing
-theories about how stories are constructed.  Current approaches to story
-generation employ a pipeline model where discourse (delivery of narrative)
-% problem
-is built atop an underlying fabula structure. But a fabula-first approach
-to story generation demands extensive, deep world modeling, much of which
-effort will be ignored at discourse-generation time. 
+Comics use sequences of still, two-dimensional visual stimuli to tell
+stories, and they are deeply entwined with humanity's creative history.
+While there is prior work on computationally generating discourse
+(conveyance of narrative) for textual stories, few attempts have been made
+to target comics, which carry distinct challenges and affordances, as a
+discourse language.  Standard pipeline-based approaches to narrative
+generation, wherein a discourse is configured only after a fabula has been
+fixed, do not map well onto the affordances of purely visual panel
+sequences.
 
-% problem 2
-Meanwhile, {\em
-purely-visual comics} are a storytelling medium that uses still,
-two-dimensional visual stimuli to tell stories, dramatically constraining
-the language of discourse while opening up other narrative affordances.
-Very few attempts have been made to computationally generate comics, mainly
-conforming to fixed panel contents which cannot be flexibly rearranged
-while retaining narrative coherence.
-% standard fabula-based approaches are a poor match for their expressive
-% range. (XXX can we back up this claim?)
+% XXX can we back up this claim more strongly?
+
+% Prior efforts toward comic-authoring computer programs mainly
+% conform to fixed panel contents which cannot be flexibly rearranged
+% while retaining narrative coherence.
 
 % solution we propose
-We propose a scheme for generating comics, including panel internals, based
-on a discourse-first approach: each panel generated at the end of a
-sequence is constrained by the history of prior panels (at the local level)
-and, optionally, by a discourse grammar (at the global level).
+We propose a {\em discourse-first} scheme for generating comics, including novel configurations
+of panel contents, by combining a
+bottom-up panel sequencer inspired by McCloud's taxonomy of panel
+transitions and a top-down grammar of comic arcs devised by Cohn.
 % results
-As a result, we have built a flexible framework for comic generation that
-can be extended with a number of visual palettes. Our algorithm generates a
-diverse range of comics that provide a vector for analyzing and evaluating
-the validity of the visual discourse theories that drive them.
+Our approach yields a flexible algorithm for comic generation whose output
+can be rendered with a number of visual palettes, for which we have built
+one proof-of-concept example and observed a wide range of variability in
+output. Our efforts represent a first step toward robust comic generation
+and provide a platform for analyzing and evaluating the validity of visual
+discourse theories.
+
 
