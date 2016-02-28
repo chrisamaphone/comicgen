@@ -4,7 +4,10 @@ Our approach to generating visual narratives begins as a linear
 process that selects next comic panels based on the contents of previous
 panels, choosing randomly among indistinguishably-valid choices.
 The concepts we represent formally are {\em transitions}, {\em frames}, and
-{\em visual elements}, which we define below.
+{\em visual elements}, which we define below. There are two levels on which
+to make sense of these terms: the symbolic level, i.e. the intermediate,
+human-readable program datastructures representing a comic, and the
+rendered level, designed to be consumed by human visual perception.
 
 % XXX how to make this a heading that looks different from a section
 % heading?
@@ -13,11 +16,11 @@ The concepts we represent formally are {\em transitions}, {\em frames}, and
 A {\bf visual element (VE)} is a unique identifier from an infinite set,
 each of which is possible to map to a distinct visual representation.
 We do not explicitly tag visual elements as specifically characters, props,
-or scenery, making the representation agnostic to which of these narrative
-interpretations will apply. In the visual rendering of our comics, we
-represent VEs as random combinations of shape, color, and size, supplying
-additional inputs to the human cognitive processes that may interpret these
-elements' narrative role.
+or scenery, making the symbolic representation agnostic to which of these narrative
+interpretations will apply. In the visual rendering, we represent VEs as
+random combinations of shape, color, and size, supplying additional inputs
+to the human cognitive processes that may interpret these elements'
+narrative role.
 
 A {\bf frame} is a panel template; at the abstract generation level, it
 includes an identifier or set of tags and a minimum number of required
@@ -100,19 +103,22 @@ transition type's definition (described above). Generate new VEs when
 necessary.
 \end{itemize}
 
-In addition to our OCaml implementation, which can be found on
-GitHub,\footnote{\url{http://www.github.com/chrisamaphone/comicgen}} we
-have implemented a web front-end in JavaScript.\footnote{
-\url{http://www.cs.cmu.edu/~cmartens/comicgen}} This front-end
-assigns each frame type to a set of coordinates given by percentage of the
-vertical and horizontal panel size, then renders panels by placing visual
-elements at those coordinates. Visual elements are represented by randomly
-generated combinations of size, shape (circle or rectangle), and color.
-An example of the generator's output can be seen in Figure~\ref{fig:out1}.
+% In addition to our OCaml implementation
+% XXX unblind
+% , which can be found on GitHub,\footnote{\url{http://www.github.com/chrisamaphone/comicgen}} we
+% have implemented a web front-end in JavaScript.\footnote{
+%\url{http://www.cs.cmu.edu/~cmartens/comicgen}} 
+We implemented this algorithm in OCaml and additionally implemented a
+front-end, a web-based renderer, that assigns each frame type to a set of
+coordinates given by percentage of the vertical and horizontal panel size,
+then renders panels by placing visual elements at those coordinates. Visual
+elements are represented by randomly generated combinations of size, shape
+(circle or rectangle), and color.  An example of the generator's output can
+be seen in Figure~\ref{fig:out1}.
 
 \begin{figure}
-\caption{Example of output.}
 \includegraphics[width=0.5\textwidth]{comicgen-unconstrained-ok.png}
+\caption{Example of output.}
 \label{fig:out1}
 \end{figure}
 
@@ -124,8 +130,8 @@ visual elements are introduced at the end of the comic, but not connected
 back to previous elements; see Figure~\ref{fig:outbad} for an example. 
 
 \begin{figure}
-\caption{Example of underconstrained output.}
 \includegraphics[width=0.5\textwidth]{comicgen-underconstrained-2.png}
+\caption{Example of underconstrained output.}
 \label{fig:outbad}
 \end{figure}
 
@@ -133,12 +139,13 @@ In an attempt to understand the global structure of comic panel sequences,
 Cohn et al. (XXX cite) investigate the {\em linguistic structure} of
 visual narratives. They claim that understandable comics follow a grammar
 that organizes its global structure. Instead of transition types, Cohn's
-grammar of comics consists of {\em roles} that each panel plays in the
-narrative. These roles are {\bf establisher}, {\bf initial}, {\bf
+grammar of comics consists of grammatical categories (analogous to nouns,
+verbs, and so on) indicating the role that each panel plays in the
+narrative. These categories are {\bf establisher}, {\bf initial}, {\bf
 prolongation}, {\bf peak}, and {\bf release}, which allow the formation of
 standard narrative patterns including the Western ``initial, peak,
 release'' dramatic arc. Formally, Cohn gives the following grammar 
-as a general template for sequences of panel roles:
+as a general template for comic ``sentences,'' or well-formed arcs:
 
 {\it
 (Establisher) -- (Initial (Prolongation)) -- Peak -- (Release)}
@@ -173,11 +180,13 @@ transitions.
 In particular, we enumerate every possible role bigram in Cohn's grammar,
 such as {\em initial to prolongation}, {\em prolongation to peak}, and so
 on, and describe sets of transition types that could plausibly model the
-relationship. This mapping is determined by the code below:
+relationship. This mapping is determined by the code below, which matches a
+pair of roles against all possible sequential pairings and takes each pair
+to a list of valid transition types:
 
 \begin{Verbatim}[fontsize=\scriptsize]
-let valid_transitions roles =
-  match roles with
+let valid_transitions categories =
+  match categories with
     (Establisher, Initial) -> 
       [Moment; Subtract; Add; RendezVous]
   | (Establisher, Prolongation) -> 
@@ -193,22 +202,33 @@ let valid_transitions roles =
   | _ -> [End] (* error! *)
 \end{Verbatim}
 
-XXX describe randomly generating an instance of the grammar and feeding it
-to the otherwise-same generator
+This particular mapping is guided by our intuition rather than any kind of
+systematic symbolic reasoning---we aim to rule out obvious-seeming
+syntactic errors, e.g. a ``meanwhile'' transition at the end of an arc, but
+other constraints are not so easily expressed. For instance, perhaps a
+``prolongation'' should be realized as a repetition of the previous
+transition, but this information is not available in the bigram model. In
+future work, we would like to refine the theoretical grounding of the
+relationship between transitions and grammatical categories.
+
+With this mapping established, we randomly generate an instance of the
+arc grammar and populate it with an appropriate set of transitions, after
+which point we simply hook the transition sequence up to the same panel
+selector from before.
 
 Examples of the constrained generator's output can be found in
 Figure~\ref{fig:outgood}.
 
 \begin{figure}
-\caption{Example of grammatically-constrained output.}
-
 \includegraphics[width=0.5\textwidth]{comicgen-output-constrained-1.png}
-
-Another example:
-
-\includegraphics[width=0.5\textwidth]{comicgen-output-4.png}
-
+\caption{Example of grammatically-constrained output.}
 \label{fig:outgood}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=0.5\textwidth]{comicgen-output-4.png}
+\caption{Example of grammatically-constrained output.}
+\label{fig:redgreen}
 \end{figure}
 
 
