@@ -1,82 +1,130 @@
 %================================================================
 \section{On Generating Comics}
 
-The computational generation of comics presents a novel challenge. Comics 
-share structural similarity to written text~\cite{saraceni2016relatedness}: 
-they are both made up of individual elements (sentences in text, panels in 
-comics), delimited by special-purpose symbols (full stops in text, panel 
-borders in comics), which can be easily identified, and which can contain a 
-variable amount of information. However, unlike text, comics afford an additional \emph{pictorial} dimension through which to express information. To 
-\citeA{cohn2013visual}, comics are one instance of the more broader 
-\emph{theory of visual language}, which itself is used to communicate via
-a palette of visual elements and their spatial relationships to one another,
-e.g. their relative size, rotation, horizontal and vertical juxtaposition, 
-and distance. While in general comics offer two dimensions of authorship 
-affordances (textual and visual language), in this work we are concerned 
-only with the pictorial dimension.
+One interesting and paradoxical aspect of narrative discourse is how constrained
+it is for conveying narrative structure. The constraint is twofold. For
+starters, there is a practical constraint in that there are only so many
+discourse elements that can be delivered at a time before the ensemble becomes
+too littered to understand. In visual media, there are only so many visual
+elements that can be portrayed at any one instance (either in a frame, or on a
+screen) before the discourse becomes incomprehensible. Textual media does not
+necessarily suffer from this constraint, but it suffers from the other: the
+attentional limits of the story consumer. A reader or viewer could be
+potentially overtaxed at having to parse an overwhelming amount of narrative
+detail.
 
-One interesting and paradoxical aspect of purely-visual comics is how
-constrained they are for conveying narrative structure. The constraint is 
-two-fold. Firstly, there is a practical constraint in that there are 
-only so many visual elements that can be placed in a particular frame
-before the ensemble becomes too littered to understand. Secondly, there
-is an attentional constraint in that (even if we were to mediate
-the first concern) a potential story consumer could be potentially
-disengaged at the prospect of having to parse an overwhelming amount of
-visual detail. There thus exists a tacit expectation on behalf of story
-consumers that authors will make their contributions to the narrative arc
-as brief and relevant as they need to be. As \citeA{murray2011why} states:
+There thus exists a tacit expectation on behalf of story consumers that authors
+will make their contributions to the narrative arc as brief and relevant as they
+need to be. As \citeA{murray2011why} states:
 %
-\begin{quote}
-	In a mature medium nothing happens, nothing is brought on stage (or 
-	screen or comic book panel or described in prose) that does not in
-	some way further the action. Whatever the viewer is invited to direct
-	attention to is something that further defines the role (character) 
-	or the function (dramatic beat).
-\end{quote}
+\begin{quote} 
+	In a mature medium nothing happens, nothing is brought on stage (or screen 
+	or comic book panel or described in prose) that does not in some way further 
+	the action. Whatever the viewer is invited to direct attention to is
+	something that further defines the role ([of a] character) or the function 
+	(dramatic beat). 
+	\end{quote}
 %
-These expectations give rise to narrative devices such as \emph{Chekhov's gun},\footnote{\url{http://tvtropes.org/pmwiki/pmwiki.php/Main/ChekhovsGun}} and a
-related counterpart, the \emph{red herring}.\footnote{\url{http://tvtropes.org/pmwiki/pmwiki.php/Main/RedHerring}}
+These expectations give rise to narrative devices such as \emph{Chekhov's gun},
+and a related counterpart, the \emph{red herring}.
 
-By the same token, authors construct narratives in a way that
-facilitates their comprehension by the audience. People learn to optimize 
-their consumption of relevant information~\cite{pirolli2007information}, 
-and work to construct inferences~\cite{magliano2016filling} about story 
-content in the liminal spaces of discourse (in between sentences in text, 
-and in between panels in comics); inferences of story content are 
-constructed when they are \emph{needed} for comprehension, and 
-\emph{enabled} by what has been told thus far~\cite{myers1987degree}.
-
-All told, the dynamic between story authors and consumers parallels the
-expected conduct of people engaged in cooperative conversation as outlined
-by the philosopher of language \citeA{grice1975logic}.
-
-\note{RCR}{An example comic here would be fantastic.}
+By the same token, authors construct narratives in a way that facilitates their
+comprehension by the audience. People learn to optimize their consumption of
+relevant information~\cite{pirolli2007information}, and work to construct
+inferences~\cite{magliano2016filling} about story content in the liminal spaces
+of discourse (in between sentences in text, panels in comics, scenes in film);
+inferences for story content are constructed when they are \emph{needed} for
+comprehension, and \emph{enabled} by what has been narrated thus
+far~\cite{myers1987degree}. All told, the dynamic between story authors and
+consumers parallels the expected conduct of people engaged in cooperative
+conversation as outlined by the philosopher of language \citeA{grice1975logic}.
 
 Thus, for the enterprise of computational narratology, it seems prudent to
 understand and computationally model the constraints and effects of narrative
-discourse, since (as the primary point of contact with the narrative artifact) 
+discourse, since (as the primary point of contact with the narrative artifact)
 narrative discourse carries with it expectations and conventions that ultimate
-effect how story consumers understand the narrative. While we 
-acknowledge that coherent story structure is important for 
-comprehension~\cite{graesser2002how}, we feel that the story exists primarily
-in the head of the narrative consumer, and that story structure is recovered 
-by the consumer insofar it is afforded by the discourse structure. In particular
-for the case of comics, \citeA{saraceni2016relatedness} argues that a comic's
-discursive structure ought to afford readers a sense of \emph{relatedness}, 
-between comic elements.
+effect how story consumers understand the narrative. While we acknowledge that
+coherent story structure is important for comprehension~\cite{graesser2002how},
+we feel that the story exists primarily in the head of the narrative consumer,
+and that story structure is recovered by the consumer insofar it is afforded by
+the discourse structure. Because theories of discourse structure feature
+prominently in the study of comics, the computational generation
+of comics presents an excellent avenue through which to begin to study the
+computational role of narrative discourse in the generation of narrative.
 
-%	 	Indeed, \citeA{saraceni2016relatedness} argues that comic structure 
-%		ought to demonstrate \emph{relatedness}, which spans from the structural
-%		aspects of discourse to the cognitive aspects of discourse (which turns
-%		out to be the structural aspect of stories, needed for sense-making).
+Comics share structural similarity to written
+text~\cite{saraceni2016relatedness}: they are both made up of individual
+elements (sentences in text, panels in comics), delimited by special-purpose
+symbols (full stops in text, panel borders in comics), which can be easily
+identified, and which can contain a variable amount of information. However,
+unlike text, comics afford an additional \emph{pictorial} dimension through
+which to express information via a palette of visual elements and their spatial
+relationships to one another, e.g. their relative size, rotation, horizontal and
+vertical juxtaposition, and distance. While in general comics offer two
+dimensions of authorship affordances (textual and visual language), in this work
+we are concerned only with the pictorial dimension.
 
-\note{RCR}{Discuss the three elements of Saraceni's account, including the closure principle (third aspect of \emph{relatedness}, which depends on not what is overtly explicit in the narrative's surface code, but also on inference.  Borrowed from visual perception and Gestalt principles.}
+\citeauthor{saraceni2016relatedness} argues that a comic's discursive structure
+ought to afford readers a sense of \emph{relatedness} between comic elements.
+Relatedness, a property of a comic that indicates how its panels are
+connected or associated, depend on a comic's \emph{cohesion} -- the
+lexico-grammatical features that tie panels together -- and \emph{coherence} --
+the reader's perception of how individual panels contribute to her mental model
+of the unfolding events. Relatedness emerges from a spectrum of \emph{textual}\footnote{\emph{Textual} here does not mean the use of actual text, but rather is a shorthand for \emph{surface code}~\cite{zwaan1998situation}.}
+factors to \emph{cognitive} factors, illustrated in \fref{figure:relatedness}.
+%
+%\note{RCR}{It would be great to have one comic that allows us to talk about all three aspects.}
+%
+\citeauthor{saraceni2016relatedness} distinguishes three categories of relatedness.
+Closer to the textual end of the spectrum is the \emph{repetition} of visual
+elements across panels. Beyond repetition is \emph{collocation}, which refers
+to a reader's expectation that related visual elements will appear given the
+ones that have been perceived. Closer to the cognitive end of the spectrum is
+the \emph{closure} over comic elements, which refers to the way our minds 
+complete narrative material given to us. Closure is terminologically borrowed 
+from the field of visual cognition, but is intended as the mental process 
+of inference that occurs as part of a reader's 
+\emph{search for meaning}~\cite{gerrig1994readers}.
 
 
-\note{RCR}{I think a figure that illustrates the spectrum of structural-relatedness to cognitive-relatedness would be good here.}
+%
+\begin{figure}
+	\includegraphics[width=\columnwidth]{relatedness.png}
+	\caption{
+		The spectrum of \emph{relatedness} as discussed by
+		\citeA{saraceni2016relatedness}. Relatedness indicates how 
+		comic panels are connected or associated in the minds of 
+		readers, spanning from textual factors to cognitive factors. 
+		Along that spectrum, there are three  distinguished 
+		categories of relatedness: \emph{repetition}, 
+		\emph{collocation}, and \emph{closure}, which have
+		demonstrably different effects on the construction of
+		narrative mental models.
+		}
+	\label{figure:relatedness}
+\end{figure}
+%
+%	 	Indeed, \citeA{saraceni2016relatedness} argues that comic structure
+%	 	ought to demonstrate \emph{relatedness}, which spans from the
+%	 	structural aspects of discourse to the cognitive aspects of discourse
+%	 	(which turns out to be the structural aspect of stories, needed for
+%	 	sense-making).
+%
+% \note{RCR}{Discuss the three elements of Saraceni's account, including the closure principle (third aspect of \emph{relatedness}, which depends on not what is overtly explicit in the narrative's surface code, but also on inference. Borrowed from visual perception and Gestalt principles.}
 
-In our work we sought to develop a small scale computational model, and thus focused primarily on modeling discourse structure which lies on the structural side of the spectrum. However, our discourse model includes a minimal model of story, which is needed in order to account for some elements of the cognitive side of the spectrum.  We developed two computational models of discourse structure: one based on~\citeauthor{mcCloud1993understanding}'s~(\citeyear{mcCloud1993understanding}) account of \emph{transition types}, and the other based on \citeauthor{cohn2013visual}'s~(\citeyear{cohn2013visual}) \emph{theory of visual language}.
+%\note{RCR}{I think a figure that illustrates the spectrum of
+%structural-relatedness to cognitive-relatedness would be good here.}
+%
+In our work we sought to develop a small scale computational model, and thus
+focused primarily on modeling discourse structure which lies on the textual
+side of the spectrum. However, our discourse model includes a minimal model of
+story, which is needed in order to account for some elements of the cognitive
+side of the spectrum.  We developed two computational models of discourse
+structure: one based
+on~\citeauthor{mcCloud1993understanding}'s~(\citeyear{mcCloud1993understanding})
+account of \emph{transition types}, and the other based on
+\citeauthor{cohn2013visual}'s~(\citeyear{cohn2013visual}) \emph{theory of visual
+language}.
 
 
 % Human brains' ability to fill in gaps is also why comics are simpler than
