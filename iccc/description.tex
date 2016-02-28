@@ -40,17 +40,18 @@ A {\bf panel} is a frame instantiated by specific visual elements.
 Finally, a {\bf transition} is a specification for how a panel should be
 formed as the next panel in a sequence, which we describe formally below.
 
-Transition types were first described by
-McCloud~\cite{mcCloud1993understanding} as a means of analyzing
+Transition types were first described by \citeA{mcCloud1993understanding} 
+as a means of analyzing
 comics. He gave an account of transitions including {\em moment-to-moment},
 {\em subject-to-subject}, and {\em aspect-to-aspect}, referring to changes
-in temporal state, focal subjects, and spatial point-of-view. As Cohn (XXX
-cite ch 4 of visual lang of comics) points out, these transition types are
+in temporal state, focal subjects, and spatial point-of-view. As 
+Cohn~(\citeyear{cohn2013visual}, Chapter 4) points out, these transition types are
 highly contextual; they presume the reader has a semantic model of the
-``story world'' in which the comic takes place. For the sake of
-computational generation, we derive a more {\em syntactic} notion of
+story world in which the comic takes place. For the sake of
+computational generation, we derived a more {\em syntactic} notion of
 transition defined purely in terms of frames and (abstract) visual
-elements. So, for example, while McCloud could refer to an action-to-action
+elements. For example, while \citeauthor{mcCloud1993understanding} could 
+refer to an action-to-action
 transition as one where a character is depicted carrying out two distinct
 actions, we have no notion of {\em character} and {\em action}, so instead
 must refer to which visual elements appear and in which frame. The
@@ -136,7 +137,7 @@ back to previous elements; see Figure~\ref{fig:outbad} for an example.
 \end{figure}
 
 In an attempt to understand the global structure of comic panel sequences,
-Cohn et al. (XXX cite) investigate the {\em linguistic structure} of
+\citeA{cohn2016visual} and his colleagues investigate the {\em linguistic structure} of
 visual narratives. They claim that understandable comics follow a grammar
 that organizes its global structure. Instead of transition types, Cohn's
 grammar of comics consists of grammatical categories (analogous to nouns,
@@ -163,7 +164,8 @@ scheme does not manipulate the internal structure of the comic panels,
 allowing for less variability in the output than our scheme with visual
 elements and frames. Additionally, codifying the syntactic structure of
 individual panels allows us to characterize {\em relatedness} between
-panels in the manner of Saraceni (XXX cite). In our second iteration of the
+panels in the manner of \citeA{saraceni2016relatedness}. In our second 
+iteration of the
 generator, we combine two approaches to discourse, using {\em global} Cohn
 grammars to guide the {\em local} selection of syntactically-defined
 transitions.
@@ -201,6 +203,7 @@ let valid_transitions categories =
   | (Peak, Release) -> [Subtract; Add; RendezVous]
   | _ -> [End] (* error! *)
 \end{Verbatim}
+\note{RCR}{What do you think about putting this in a pseudocode environment, or in a BNF-type format?}
 
 This particular mapping is guided by our intuition rather than any kind of
 systematic symbolic reasoning---we aim to rule out obvious-seeming
