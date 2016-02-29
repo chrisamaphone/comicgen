@@ -278,11 +278,10 @@ type comic = (panel * transition) list
       | (Establisher, Peak) -> [Add; Meanwhile]
       | (Initial, Prolongation) -> [Moment; Subtract; Add]
       | (Prolongation, Prolongation) -> [Moment; Subtract; Add]
-      | (Prolongation, Peak) -> [Subtract; Add; RendezVous]
+      | (Prolongation, Peak) -> [Subtract; Add; RendezVous; Meanwhile]
       | (Initial, Peak) -> [Subtract; Add; Meanwhile; RendezVous]
-      | (Peak, Release) -> [Subtract; Add; RendezVous]
+      | (Peak, Release) -> [Moment; Subtract; RendezVous]
       | _ -> [End] (* error! *)
-
 
   (*
   let pickConstrainedFrame nves role : frame =
