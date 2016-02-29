@@ -9,10 +9,6 @@ to make sense of these terms: the symbolic level, i.e. the intermediate,
 human-readable program datastructures representing a comic, and the
 rendered level, designed to be consumed by human visual perception.
 
-% XXX how to make this a heading that looks different from a section
-% heading?
-% \subsection{Visual elements, frames, and transitions}
-
 A {\bf visual element (VE)} is a unique identifier from an infinite set,
 each of which is possible to map to a distinct visual representation.
 We do not explicitly tag visual elements as specifically characters, props,
@@ -44,8 +40,8 @@ Transition types were first described by
 McCloud~\cite{mcCloud1993understanding} as a means of analyzing
 comics. He gave an account of transitions including {\em moment-to-moment},
 {\em subject-to-subject}, and {\em aspect-to-aspect}, referring to changes
-in temporal state, focal subjects, and spatial point-of-view. As Cohn (XXX
-cite ch 4 of visual lang of comics) points out, these transition types are
+in temporal state, focal subjects, and spatial point-of-view. As
+Cohn~\cite{cohn2013visual} points out, these transition types are
 highly contextual; they presume the reader has a semantic model of the
 ``story world'' in which the comic takes place. For the sake of
 computational generation, we derive a more {\em syntactic} notion of
@@ -135,17 +131,17 @@ back to previous elements; see Figure~\ref{fig:outbad} for an example.
 \label{fig:outbad}
 \end{figure}
 
-In an attempt to understand the global structure of comic panel sequences,
-Cohn et al. (XXX cite) investigate the {\em linguistic structure} of
-visual narratives. They claim that understandable comics follow a grammar
-that organizes its global structure. Instead of transition types, Cohn's
-grammar of comics consists of grammatical categories (analogous to nouns,
-verbs, and so on) indicating the role that each panel plays in the
-narrative. These categories are {\bf establisher}, {\bf initial}, {\bf
-prolongation}, {\bf peak}, and {\bf release}, which allow the formation of
-standard narrative patterns including the Western ``initial, peak,
-release'' dramatic arc. Formally, Cohn gives the following grammar 
-as a general template for comic ``sentences,'' or well-formed arcs:
+In an attempt to codify the global structure of comic panel sequences,
+Cohn et al.~\cite{cohn2013visual} investigate the {\em linguistic
+structure} of visual narratives. They claim that understandable comics
+follow a grammar that organizes its global structure. Instead of transition
+types, Cohn's grammar of comics consists of grammatical categories
+(analogous to nouns, verbs, and so on) indicating the role that each panel
+plays in the narrative. These categories are {\bf establisher}, {\bf
+initial}, {\bf prolongation}, {\bf peak}, and {\bf release}, which allow
+the formation of standard narrative patterns including the Western
+``initial, peak, release'' dramatic arc. Formally, Cohn gives the following
+grammar as a general template for comic ``sentences,'' or well-formed arcs:
 
 {\it
 (Establisher) -- (Initial (Prolongation)) -- Peak -- (Release)}
@@ -155,18 +151,17 @@ in several of Cohn's examples), we also assume that prolongations may occur
 arbitrarily many times in sequence.
 
 Grossman built a generator based purely on Cohn's arc grammar,\footnote{
-  \url{http://www.suzigrossman.com/fineart/conceptual/Sunday_Comics_Scrambler}
-}
-picking hand-annotated panels for each of an {\em initial},
-{\em peak}, and {\em release} slot in the comic. However, this generation
-scheme does not manipulate the internal structure of the comic panels,
-allowing for less variability in the output than our scheme with visual
-elements and frames. Additionally, codifying the syntactic structure of
-individual panels allows us to characterize {\em relatedness} between
-panels in the manner of Saraceni (XXX cite). In our second iteration of the
-generator, we combine two approaches to discourse, using {\em global} Cohn
-grammars to guide the {\em local} selection of syntactically-defined
-transitions.
+\url{http://www.suzigrossman.com/fineart/conceptual/Sunday_Comics_Scrambler}
+} picking hand-annotated panels for each of an {\em initial}, {\em peak},
+and {\em release} slot in the comic. However, this generation scheme does
+not manipulate the internal structure of the comic panels, allowing for
+less variability in the output than our scheme with visual elements and
+frames. Additionally, codifying the syntactic structure of individual
+panels allows us to characterize {\em relatedness} between panels in the
+manner of Saraceni~\cite{saraceni2016relatedness}. In our second iteration
+of the generator, we combine two approaches to discourse, using {\em
+global} Cohn grammars to guide the {\em local} selection of
+syntactically-defined transitions.
 
 % What I want to say is: we don't just benefit from Cohn's work;
 % he benefits from ours, because we're operationalizing semantic panel
