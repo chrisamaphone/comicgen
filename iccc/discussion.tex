@@ -1,18 +1,12 @@
+%================================================================
 \section{Future Work}
 
-To further develop this work, we would like to carry out evaluations of our
-system as well as refine it to more accurately reflect leading discourse
-theories.
+There are three main avenues that we would like to explore to further develop
+this work.
 
-Evaluation:
-\begin{itemize}
-\item Expressive range analysis~\cite{smith2010analyzing}
-\item Narrative comprehension tests
-\item Others?
-\end{itemize}
-
+The first avenue is with respect to a refinement of our system's discourse 
+model. We would like to refine our model in several key ways, including\ldots
 Reformulating the implementation:
-
 \begin{itemize}
 \item Connecting panel internals to narrative structure: roles for visual
 elements
@@ -22,12 +16,32 @@ rather than simply their frame/VE sets -- which VE gets assigned to which
 frame position is lost information, for example
 \end{itemize}
 
-Extending what we can talk about:
+The second avenue is with respect to the system's expressivity. Currently, our
+system cannot reason about the following key aspects\ldots
 \begin{itemize}
 \item Text and images together
 \item More hierarchical structure -- sequences of comic ``pages'';
 larger-scale stories
 \end{itemize}
+
+The third avenue is with respect to the empirical evaluation of this work.
+There are several ways that we could evaluate our system, and each evaluation
+would lend different strength to our approach. One candidate evaluation involves
+analyzing our system's \emph{expressive range}~\cite{smith2010analyzing}.
+
+Another candidate evaluation involves analyzing the level of comprehension
+that our generated comics afford an audience. While there has been work in
+understanding how people read into narratives involving abstract
+shapes~\citeeg{heider1944experimental}, this evaluation would be more 
+concerned with whether the discourse categories (as discussed by Cohn) that
+guide the selection of transitions are recognizable by an audience during
+comprehension. \citeA{cohn2015narrative} discusses a methodology through 
+which panel discourse categories can be analytically identified; we are 
+interested in whether comic panel categories can be analytically identified 
+when they are intentionally selected by our generative system.
+
+\note{RCR}{Other evaluation-focused work?}
+
 
 
 
