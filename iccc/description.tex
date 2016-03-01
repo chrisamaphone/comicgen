@@ -57,8 +57,8 @@ audience interpretation is not modeled to inform generation.
 
 \subsection{Formal Transition Types}
 
-We introduce six formal transition types: {\bf moment}, {\bf add}, {\bf
-subtract}, {\bf meanwhile}, and {\bf rendez-vous}, each of which specifies
+We introduce six formal transition types: {\em moment}, {\em add}, {\em
+subtract}, {\em meanwhile}, and {\em rendez-vous}, each of which specifies
 how a next panel should be constructed given the prior sequence.
 
 \begin{itemize}
@@ -89,16 +89,16 @@ sequence of panels (frame names and VE sets) together with a record of the
 transitions that connect them.
 
 The generation algorithm is:
-\begin{itemize}
+\begin{enumerate}
 \item Generate transition sequence by choosing transitions uniformly at
-random, constrained by supplied minimum and maximum length
+random, constrained by supplied minimum and maximum length.
 \item Generate unique identifiers matching the number of specified starting
-VEs
+VEs.
 \item Feed transition sequence and starting VEs to panel sequencer, which
 selects a next frame and VE set for each new panel based on each
 transition type's definition (described above). Generate new VEs when
 necessary.
-\end{itemize}
+\end{enumerate}
 
 % In addition to our OCaml implementation
 % XXX unblind
@@ -106,28 +106,27 @@ necessary.
 % have implemented a web front-end in JavaScript.\footnote{
 %\url{http://www.cs.cmu.edu/~cmartens/comicgen}} 
 We implemented this algorithm in OCaml and additionally implemented a
-front-end, a web-based renderer, that assigns each frame type to a set of
-coordinates given by percentage of the vertical and horizontal panel size,
+front-end, a web-based renderer. The renderer assigns each frame type to a set of
+coordinates given by percentage of the vertical and horizontal panel size, and
 then renders panels by placing visual elements at those coordinates. Visual
 elements are represented by randomly generated combinations of size, shape
 (circle or rectangle), and color.  An example of the generator's output can
 be seen in Figure~\ref{fig:out1}.
 
 \begin{figure}
-\includegraphics[width=0.5\textwidth]{comicgen-unconstrained-ok.png}
+\includegraphics[width=\columnwidth]{comicgen-unconstrained-ok.png}
 \caption{Example of output.}
 \label{fig:out1}
 \end{figure}
 
-\section{Constraining generation with Cohn grammars}
-
+\subsection{Constraining Generation with Cohn Grammars}
 Generating random transition sequences may result in nonsensical output,
-such as ending a comic with a ``meanwhile'' frame in which completely new
-visual elements are introduced at the end of the comic, but not connected
-back to previous elements; see Figure~\ref{fig:outbad} for an example. 
+such as ending a comic with a \emph{meanwhile} frame in which completely new
+visual elements are introduced at the end of the comic, but not connected to 
+previous elements; see Figure~\ref{fig:outbad} for an example. 
 
 \begin{figure}
-\includegraphics[width=0.5\textwidth]{comicgen-underconstrained-2.png}
+\includegraphics[width=\columnwidth]{comicgen-underconstrained-2.png}
 \caption{Example of underconstrained output.}
 \label{fig:outbad}
 \end{figure}
@@ -140,14 +139,13 @@ grammar of comics consists of grammatical categories (analogous to nouns,
 verbs, and so on) indicating the role that each panel plays in the
 narrative. These categories are {\bf establisher}, {\bf initial}, {\bf
 prolongation}, {\bf peak}, and {\bf release}, which allow the formation of
-standard narrative patterns including the Western ``initial, peak,
-release'' dramatic arc. Formally, Cohn gives the following grammar 
+standard narrative patterns including the Western dramatic arc of 
+\hbox{\em initial -- peak -- release}. Formally, Cohn gives the following grammar 
 as a general template for comic ``sentences,'' or well-formed arcs:
 
-{\it
-(Establisher) -- (Initial (Prolongation)) -- Peak -- (Release)}
+{\it (Establisher) -- (Initial (Prolongation)) -- Peak -- (Release)}
 
-Symbols in parentheses are optional. In our expression of this grammar (and
+\noindent Symbols in parentheses are optional. In our expression of this grammar (and
 in several of Cohn's examples), we also assume that prolongations may occur
 arbitrarily many times in sequence.
 
@@ -160,7 +158,7 @@ scheme does not manipulate the internal structure of the comic panels,
 allowing for less variability in the output than our scheme with visual
 elements and frames. Additionally, codifying the syntactic structure of
 individual panels allows us to characterize {\em relatedness} between
-panels in the manner of \citeA{saraceni2016relatedness}. In our second
+panels as described by \citeA{saraceni2016relatedness}. In our second
 iteration of the generator, we combine two approaches to discourse, using
 {\em global} Cohn grammars to guide the {\em local} selection of
 syntactically-defined transitions.
@@ -177,10 +175,11 @@ syntactically-defined transitions.
 In particular, we enumerate every possible role bigram in Cohn's grammar,
 such as {\em initial to prolongation}, {\em prolongation to peak}, and so
 on, and describe sets of transition types that could plausibly model the
-relationship. This mapping is determined by the code below, which matches a
-pair of roles against all possible sequential pairings and takes each pair
-to a list of valid transition types:
-
+relationship. This mapping is determined by the code in 
+\fref{figure:transitions}, which matches a pair of roles against all 
+possible sequential pairings and takes each pair to a list of valid 
+transition types.
+\begin{figure}
 \begin{Verbatim}[fontsize=\scriptsize]
 let valid_transitions categories =
   match categories with
@@ -198,13 +197,15 @@ let valid_transitions categories =
   | (Peak, Release) -> [Subtract; Add; RendezVous]
   | _ -> [End] (* error! *)
 \end{Verbatim}
-\note{RCR}{What do you think about putting this in a pseudocode environment, or in a BNF-type format?}
+\caption{Mapping from pairs of roles to possible sequential transition types.}
+\label{figure:transitions}
+\end{figure}
 
 This particular mapping is guided by our intuition rather than any kind of
 systematic symbolic reasoning---we aim to rule out obvious-seeming
-syntactic errors, e.g. a ``meanwhile'' transition at the end of an arc, but
+syntactic errors, e.g. a \emph{meanwhile} transition at the end of an arc, but
 other constraints are not so easily expressed. For instance, perhaps a
-``prolongation'' should be realized as a repetition of the previous
+\emph{prolongation} should be realized as a repetition of the previous
 transition, but this information is not available in the bigram model. In
 future work, we would like to refine the theoretical grounding of the
 relationship between transitions and grammatical categories.
