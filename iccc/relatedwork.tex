@@ -8,19 +8,28 @@ been covered in the computational creativity community.
 
 \citeA{guerrero2014social} developed a nuanced computational model of social
 norms to drive the interaction of characters in the simulation of the story
-world. Their work defers the realization of text to
+world. Their work defers the development of the main plot to
 MEXICA~\cite{perez2001mexica}, a computational implementation of a
 cognitively-oriented account of writing. However MEXICA itself is primarily a
 story-level reasoner, since it leaves unspecified how the story structures that
-it generates via computational engagement and reflection are realized into
-narrative text.
+it generates via computational \emph{engagement} and \emph{reflection} are 
+realized into narrative text. 
 
-%\note{RCR}{
-%\begin{itemize}
-%	\item E-R as a form of bottom-up / top-down
-%	\item MEXICA as another system who looks to cognition to inform narrative generation
-%\end{itemize}
-%}
+While MEXICA itself follows the pipeline model of narrative generation, its
+engagement--reflection (E--R) model of authorship is relevant to our work. 
+The E--R cycle represents a \emph{tandem-process model}, which is similar to our 
+account of discourse reasoning. In MEXICA, the plot
+elaboration component (the \emph{engagement} phase) is responsible for 
+constructing an initial story framework, which is refined by a critic (the
+\emph{reflection} phase). In our work, the discourse elaboration component
+(the local reasoner) is responsible for constructing an initial discourse
+structure, which is refined by a critic (the global reasoner).  Further, 
+the E--R cycle is a \emph{cognitively-oriented} narrative generation process;
+\citeauthor{perez2001mexica} leveraged information on how humans cognitively 
+engage with the narrative authorship process in order to inform their system 
+design. In our work, we too took a cognitive orientation by looking at how 
+humans parse comic discourse structure to inform the design of our comic 
+discourse generator.
 
 \citeA{montfort2013slant} developed a blackboard architecture called Slant for
 story generation that integrates several different sub-components systems to
