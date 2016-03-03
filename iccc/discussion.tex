@@ -25,9 +25,10 @@ grammatical roles to VEs that pertain to their visual rendering (such as
 character, prop, or backdrop), then use those roles consistently across
 panel sequences.
 \item On the visual rendering level, modify visual elements and frame
-descriptions to reflect notions such as scaling/zooming, backdrops and
-layers, and partially off-panel VE presence. (XXX is there prior work on scene
-generation/description/composition languages?)
+descriptions to reason over notions such as scaling, zooming, backdrops,
+layers, and overlap among visual elements. We intend to study theories of
+semantic scene composition, such as \cite{zitnick2013bringing}, as a more
+principled basis for panel generation.
 \item Reformulate transitions in terms of {\em edits} on previous panels
 that they are meant to be related to, rather than simply repeating VE sets.
 Constrain the choice of frame as well.
@@ -42,6 +43,13 @@ comics:
 arrays that need to have coherence and cohesion at the level of panel {\em
 rows}, and multi-page comics or graphic novels that need coherence and
 cohesion at the level of comic {\em pages}.
+\item Interactive comics. The
+Storyteller~\footnote{\url{http://www.storyteller-game.com/p/about-storyteller.html}}
+system in particular suggests an intriguing basis for comic-based play in
+which players select visual elements to populate a panel, and a reasoning
+engine finds a frame that connects it narratively to the panels on either side.
+Such a system could also form the basis of a mixed-initiative comic design
+tool.
 \end{itemize}
 
 Our third avenue of future work is to empirically evaluate our system.  We
