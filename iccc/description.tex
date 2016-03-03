@@ -112,21 +112,21 @@ percentage of the vertical and horizontal panel size, and then renders
 panels by placing visual elements at those coordinates. Visual elements are
 represented by randomly generated combinations of size, shape (circle or
 rectangle), and color.  An example of the generator's output can be seen in
-Figure~\ref{fig:out1}. The narrative readings of the output are ambiguous,
-but narrative affordances are certainly present; the repetition of the grey
-(largest) rectangle in every frame suggests it as a focal point, and the
-sudden appearance of the pink (smallest) rectangle suggests an interloper
-removing the grey rectangle from its initial context (established by the
-blue rectangle and yellow circle). Together with the names of the frames
-(reported in symbolic form above the comic), we can read the sequence as
-follows: the grey rectangle whispers to the blue rectangle, then is carried
-off by a pink rectangle, who whispers to the grey rectangle and then aids
-the grey rectangle.
-
+Figure~\ref{fig:out1}. 
 
 \begin{figure}
 \includegraphics[width=\columnwidth]{comicgen-unconstrained-ok.png}
-\caption{Example of output.}
+\caption{Example of generator output.
+While the narrative here is ambigious, we read several things into it:
+the repetition of the grey (largest) rectangle in every frame suggests it
+as a focal point, and the sudden appearance of the pink (smallest)
+rectangle suggests an interloper removing the grey rectangle from its
+initial context (established by the blue rectangle and yellow circle).
+Together with the names of the frames (reported in symbolic form above the
+comic), we can read the sequence as follows: the grey rectangle whispers to
+the blue rectangle, then is carried off by a pink rectangle, who whispers
+to the grey rectangle and then aids the grey rectangle.
+}
 \label{fig:out1}
 \end{figure}
 
@@ -138,7 +138,8 @@ previous elements; see Figure~\ref{fig:outbad} for an example.
 
 \begin{figure}
 \includegraphics[width=\columnwidth]{comicgen-underconstrained-2.png}
-\caption{Example of underconstrained output.}
+\caption{Example of underconstrained output. The final panel does not
+maintain relatedness to the preceding sequence.}
 \label{fig:outbad}
 \end{figure}
 
@@ -186,12 +187,14 @@ syntactically-defined transitions.
 In particular, we enumerate every possible category bigram in Cohn's grammar,
 such as {\em initial to prolongation}, {\em prolongation to peak}, and so
 on, and describe sets of transition types that could plausibly model the
-relationship. This mapping is given in 
-\fref{figure:transitions}.
+relationship. This mapping is given below:
+% in \fref{figure:transitions}.
 
-\begin{figure}
+% \begin{figure}
 
-\scriptsize
+% \begin{table}
+
+{\scriptsize
 \begin{tabular}{lll}
 Establisher & Initial & \{Moment, Subtract, Add, RendezVous\} \\
    Establisher & Prolongation & \{Moment, Subtract, Add\} \\
@@ -202,10 +205,12 @@ Establisher & Initial & \{Moment, Subtract, Add, RendezVous\} \\
    Initial & Peak & \{Subtract, Add, Meanwhile, RendezVous\} \\
    Peak & Release & \{Subtract, Add, RendezVous\}
 \end{tabular}
+}
+% \end{table}
 
-\caption{Mapping from grammatical category bigrams to possible sequential transition types.}
-\label{figure:transitions}
-\end{figure}
+% \caption{Mapping from grammatical category bigrams to possible sequential transition types.}
+% \label{figure:transitions}
+% \end{figure}
 
 This particular mapping is guided by our intuition rather than any kind of
 systematic symbolic reasoning---we aim to rule out obvious-seeming
@@ -222,21 +227,28 @@ which point we simply hook the transition sequence up to the same panel
 selector from before.
 
 Examples of the constrained generator's output can be found in
-Figures~\ref{fig:outgood} and~\ref{fig:redgreen}. Figure~\ref{fig:outgood}
-exemplifies a common pattern in grammatically-constrained output,
-introducing a new visual element with a Meanwhile transition for the peak,
-then releasing with a Rendez-vous. Figure~\ref{fig:redgreen} illustrates a
-longer sequence with just three visual elements.
+Figures~\ref{fig:outgood} and~\ref{fig:redgreen}.
+
 
 \begin{figure}
 \includegraphics[width=0.5\textwidth]{output-constrained-canonical.png}
-\caption{Example of grammatically-constrained output.}
+\caption{Example of grammatically-constrained output.
+This example shows a common pattern in grammatically-constrained output,
+introducing a new visual element with a Meanwhile transition for the peak,
+then releasing with a Rendez-vous.
+}
 \label{fig:outgood}
 \end{figure}
 
 \begin{figure}
 \includegraphics[width=0.5\textwidth]{comicgen-output-4.png}
-\caption{Example of grammatically-constrained output.}
+\caption{Example of grammatically-constrained output
+illustrating a longer sequence with just three visual elements. Potential
+narrative readings include the green circle throwing the smaller red
+circle; the larger red circle can be seen as a different entity or as the
+extension of the smaller one. The peak of this arc is the second-to-last
+panel.
+}
 \label{fig:redgreen}
 \end{figure}
 
