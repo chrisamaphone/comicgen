@@ -11,8 +11,8 @@ we have identified a few limitations of our specific implementation
 choices.  First of all, our choice to represent a panel as a frame and,
 independently, a set of VEs, means that VEs' relationship to the frame, or
 a VE's role in prior frames, is not available or manipulable.  By analogy
-with textual and verbal language, is a panel is analogous to a sentence,
-then we have grammar at the ``paragraph'' (narrative arc) level, but not at
+with textual and verbal language, if a panel is analogous to a sentence,
+then we have grammar at the paragraph (narrative arc) level, but not at
 the sentence level.  Second, our choice to generate a transition sequence
 constrained by a grammar and {\em then} feed the transitions to a panel
 generator, itself a kind of pipeline model, means that the panel generator
@@ -20,9 +20,10 @@ cannot reflect on the grammatical role of panels to guide its selection.
 
 In a second iteration of the project, we would make the following changes:
 \begin{itemize}
-\item Use language-based tools to generate panel internals by assigning
-grammatical roles to VEs (such as character, prop, or backdrop), then
-use them consistently across panel sequences.
+\item Use linguistic theories to generate panel internals by assigning
+grammatical roles to VEs that pertain to their visual rendering (such as
+character, prop, or backdrop), then use those roles consistently across
+panel sequences.
 \item On the visual rendering level, modify visual elements and frame
 descriptions to reflect notions such as scaling/zooming, backdrops and
 layers, and partially off-panel VE presence. (XXX is there prior work on scene
@@ -42,7 +43,6 @@ arrays that need to have coherence and cohesion at the level of panel {\em
 rows}, and multi-page comics or graphic novels that need coherence and
 cohesion at the level of comic {\em pages}.
 \end{itemize}
-
 
 Our third avenue of future work is to empirically evaluate our system.  We
 have several potential evaluation plans, each investigating distinct

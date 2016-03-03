@@ -11,12 +11,11 @@ rendered level, designed to be consumed by human visual perception.
 
 A {\bf visual element (VE)} is a unique identifier from an infinite set,
 each of which is possible to map to a distinct visual representation.
-We do not explicitly tag visual elements as specifically characters, props,
-or scenery, making the symbolic representation agnostic to which of these narrative
-interpretations will apply. In the visual rendering, we represent VEs as
-random combinations of shape, color, and size, supplying additional inputs
-to the human cognitive processes that may interpret these elements'
-narrative role.
+We do not explicitly tag visual elements with their roles in the narrative,
+such as characters, props, or scenery, making the symbolic representation
+agnostic to which of these narrative interpretations will apply. In the
+visual rendering, of course, our representation choices will influence
+readers' interpretation of VEs' narrative roles.
 
 A {\bf frame} is a panel template; at the symbolic level, it
 includes an identifier or set of tags and a minimum number of required
@@ -94,10 +93,11 @@ The generation algorithm is:
 random, constrained by supplied minimum and maximum length.
 \item Generate unique identifiers matching the number of specified starting
 VEs.
-\item Feed transition sequence and starting VEs to panel sequencer, which
-selects a next frame and VE set for each new panel based on each
+\item Feed transition sequence and starting VEs to the panel sequencer,
+which selects a next frame and VE set for each new panel based on each
 transition type's definition (described above). Generate new VEs when
-necessary.
+necessary, updating the running pool of previously-used VEs at each
+iteration.
 \end{enumerate}
 
 % In addition to our OCaml implementation
@@ -106,12 +106,13 @@ necessary.
 % have implemented a web front-end in JavaScript.\footnote{
 %\url{http://www.cs.cmu.edu/~cmartens/comicgen}} 
 We implemented this algorithm in OCaml and additionally implemented a
-front-end, a web-based renderer. The renderer assigns each frame type to a set of
-coordinates given by percentage of the vertical and horizontal panel size, and
-then renders panels by placing visual elements at those coordinates. Visual
-elements are represented by randomly generated combinations of size, shape
-(circle or rectangle), and color.  An example of the generator's output can
-be seen in Figure~\ref{fig:out1}.
+front-end, a web-based renderer (not linked here for anonymous review). The
+renderer assigns each frame type to a set of coordinates given by
+percentage of the vertical and horizontal panel size, and then renders
+panels by placing visual elements at those coordinates. Visual elements are
+represented by randomly generated combinations of size, shape (circle or
+rectangle), and color.  An example of the generator's output can be seen in
+Figure~\ref{fig:out1}.
 
 \begin{figure}
 \includegraphics[width=\columnwidth]{comicgen-unconstrained-ok.png}
@@ -172,32 +173,27 @@ syntactically-defined transitions.
 % Maybe it's worth suggesting that panels themselves could obey a grammar,
 % rather than haphazardly plugging VEs into different frame positions?
 
-In particular, we enumerate every possible role bigram in Cohn's grammar,
+In particular, we enumerate every possible category bigram in Cohn's grammar,
 such as {\em initial to prolongation}, {\em prolongation to peak}, and so
 on, and describe sets of transition types that could plausibly model the
-relationship. This mapping is determined by the code in 
-\fref{figure:transitions}, which matches a pair of roles against all 
-possible sequential pairings and takes each pair to a list of valid 
-transition types.
+relationship. This mapping is given in 
+\fref{figure:transitions}.
+
 \begin{figure}
-\begin{Verbatim}[fontsize=\scriptsize]
-let valid_transitions categories =
-  match categories with
-    (Establisher, Initial) -> 
-      [Moment; Subtract; Add; RendezVous]
-  | (Establisher, Prolongation) -> 
-      [Moment; Subtract; Add]
-  | (Establisher, Peak) -> [Add; Meanwhile]
-  | (Initial, Prolongation) -> [Moment; Subtract; Add]
-  | (Prolongation, Prolongation) -> 
-      [Moment; Subtract; Add]
-  | (Prolongation, Peak) -> [Subtract; Add; RendezVous]
-  | (Initial, Peak) -> 
-      [Subtract; Add; Meanwhile; RendezVous]
-  | (Peak, Release) -> [Subtract; Add; RendezVous]
-  | _ -> [End] (* error! *)
-\end{Verbatim}
-\caption{Mapping from pairs of roles to possible sequential transition types.}
+
+\scriptsize
+\begin{tabular}{lll}
+Establisher & Initial & \{Moment, Subtract, Add, RendezVous\} \\
+   Establisher & Prolongation & \{Moment, Subtract, Add\} \\
+   Establisher & Peak & \{Add, Meanwhile\} \\
+   Initial & Prolongation & \{Moment, Subtract, Add\} \\
+   Prolongation & Prolongation & \{Moment, Subtract, Add\} \\
+   Prolongation & Peak & \{Subtract, Add, RendezVous\} \\
+   Initial & Peak & \{Subtract, Add, Meanwhile, RendezVous\} \\
+   Peak & Release & \{Subtract, Add, RendezVous\}
+\end{tabular}
+
+\caption{Mapping from grammatical category bigrams to possible sequential transition types.}
 \label{figure:transitions}
 \end{figure}
 
