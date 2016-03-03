@@ -112,7 +112,17 @@ percentage of the vertical and horizontal panel size, and then renders
 panels by placing visual elements at those coordinates. Visual elements are
 represented by randomly generated combinations of size, shape (circle or
 rectangle), and color.  An example of the generator's output can be seen in
-Figure~\ref{fig:out1}.
+Figure~\ref{fig:out1}. The narrative readings of the output are ambiguous,
+but narrative affordances are certainly present; the repetition of the grey
+(largest) rectangle in every frame suggests it as a focal point, and the
+sudden appearance of the pink (smallest) rectangle suggests an interloper
+removing the grey rectangle from its initial context (established by the
+blue rectangle and yellow circle). Together with the names of the frames
+(reported in symbolic form above the comic), we can read the sequence as
+follows: the grey rectangle whispers to the blue rectangle, then is carried
+off by a pink rectangle, who whispers to the grey rectangle and then aids
+the grey rectangle.
+
 
 \begin{figure}
 \includegraphics[width=\columnwidth]{comicgen-unconstrained-ok.png}
@@ -212,10 +222,14 @@ which point we simply hook the transition sequence up to the same panel
 selector from before.
 
 Examples of the constrained generator's output can be found in
-Figure~\ref{fig:outgood}.
+Figures~\ref{fig:outgood} and~\ref{fig:redgreen}. Figure~\ref{fig:outgood}
+exemplifies a common pattern in grammatically-constrained output,
+introducing a new visual element with a Meanwhile transition for the peak,
+then releasing with a Rendez-vous. Figure~\ref{fig:redgreen} illustrates a
+longer sequence with just three visual elements.
 
 \begin{figure}
-\includegraphics[width=0.5\textwidth]{comicgen-output-constrained-1.png}
+\includegraphics[width=0.5\textwidth]{output-constrained-canonical.png}
 \caption{Example of grammatically-constrained output.}
 \label{fig:outgood}
 \end{figure}
