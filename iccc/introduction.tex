@@ -41,13 +41,16 @@ story~\cite{saraceni2016relatedness,magliano2016filling}.
 Most prior work that uses the pipeline model implicitly assumes text, or
 spoken verbal language, as the output generation medium, which allows the
 pipeline model to avoid some of its limitations by baking medium
-assumptions into the story model. % XXX accurate?
+assumptions into the story model. For example, narrative generators can
+model updates to internal character state, such as emotion or knowledge
+change, which can simply be described in text. Communicating those
+occurrences visually poses a significantly greater challenge.
 Thus, we propose a simple kind of {\em visual} narrative as a testbed for
 discourse generation: wordless comics. Comics are a relatively unexplored
 domain of computational narratology~\cite{mani2012computational}, and they
 present a wide range of expressive opportunities not afforded by text.
 
-Thus, our work presents a departure from the pipeline model, 
+Our work represents a departure from the pipeline model, 
 \emph{discourse-driven approach to narrative generation}, for generating
 comics. In this model, the story world is only simulated inasmuch as is
 necessary to support the telling of story events in the discourse; that is,
