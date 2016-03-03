@@ -2,23 +2,26 @@
 Narrative generation enables a range of opportunities for understanding 
 the creative act of storytelling.
 % but standard pipeline model has limits
-Prior approaches have mostly converged on a pipeline model, wherein
-story structure is generated first, and discourse structure is
-generated after, mapping individual story events to discourse elements. 
+Prior approaches have mostly converged on a pipeline model, wherein story
+structure is generated as a precursor to discourse structure, mapping
+individual story events to discourse elements. 
+This model, however, unnecessarily limits narrative possibilities by
+disallowing discourse generation to restructure the story.
+Most prior work avoids the limitations of the pipeline model by implicitly
+assuming a textual output medium; these assumptions do not transfer well to
+visual media.
+
 % our approach 
-This model, however, unnecessarily limits narrative possibilities, and 
-we investigate a new model based on discourse theories. In particular, 
-% Comics offer good discourse theory
-because \emph{comics} offer a rich discourse theory, we built a
-comic generator to study \emph{discourse-driven} narrative generation.  
-Unlike prior work, we generate comics to the level of visual element
-positions, rather than rearranging pre-existing panels.  
-Our approach is based on leading discourse theories for comics by McCloud
-(panel transitions) and Cohn (narrative grammar).
+We investigate a new generation approach that treats discourse as
+primary, using {\em comic generation} as a testbed.  Our approach is based
+on leading discourse theories for comics by McCloud (panel transitions) and
+Cohn (narrative grammar).  Unlike prior comic generation work, rather than
+rearranging pre-existing panels, we also generate the configurations of
+visual elements that populate each panel. 
 % results
 Our contributions are a proof-of-concept generator with a wide range of
 abstract comic output, a computational realization of McCloud's and Cohn's
-comics theories, and a modular algorithm that affords the evaluation of 
+comics theories, and a modular algorithm that affords the evaluation of
 visual discourse theories.
 
 
