@@ -1,0 +1,26 @@
+Actionable feedback from reviews:
+
+"The paper could be improved by focusing more in what it actually delivers,
+and analyzing in detail and systematically (i.e. in a rigorous way) its
+strengths and weaknesses."
+
+"The introduction has some confusing parts. I'm still not too sure why the
+"pipeline model" is unnecessary and insufficient. That could use a little
+more explaining. Particularly the 3rd paragraph talks about it being
+unnecessary to simulate aspects of the narrative that are never
+communicated. It is unclear if the authors are supporting that notion or
+disputing it."
+
+"It is hard to see the connection between the cognitive/linguistic theories
+and how that translates into the (simple) computational system you describe
+at a high level. Is it possible to describe the proposed system/model on a
+more formal level with more detail?"
+
+"Because the system is still proof-of-concept, a stronger discussion on the
+cognitive theories mentioned in the paper would be very beneficial. It
+would be good to elaborate and explain them in more detail and to discuss
+how they relate to general notions/theories of the creative process."
+
+"It may be useful to mention more specifically how the cognitive aspects
+mentioned in the paper, and in particular the "filling the gap"  aspect
+relates to Pablo Gervas's ideas."
