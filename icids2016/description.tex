@@ -1,0 +1,255 @@
+\section{System Description}
+
+Our approach to generating visual narratives begins as a linear
+process that selects next comic panels based on the contents of previous
+panels, choosing randomly among indistinguishably-valid choices.
+The concepts we represent formally are {\em transitions}, {\em frames}, and
+{\em visual elements}, which we define below. There are two levels on which
+to make sense of these terms: the symbolic level, i.e. the intermediate,
+human-readable program datastructures representing a comic, and the
+rendered level, designed to be consumed by human visual perception.
+
+A {\bf visual element (VE)} is a unique identifier from an infinite set,
+each of which is possible to map to a distinct visual representation.
+We do not explicitly tag visual elements with their roles in the narrative,
+such as characters, props, or scenery, making the symbolic representation
+agnostic to which of these narrative interpretations will apply. In the
+visual rendering, of course, our representation choices will influence
+readers' interpretation of VEs' narrative roles.
+
+A {\bf frame} is a panel template; at the symbolic level, it
+includes an identifier or set of tags and a minimum number of required
+visual elements. The reason a frame specifies a {\em minimum} number of VEs
+is to allow for augmentation of the frame with pre-existing elements: for
+example, the {\em monologue} frame requires at least one visual element,
+indicating a single, central focal point, but other visual elements may be
+included as bystanding characters or scenery elements.
+At the rendering level, a frame includes instructions for where in the
+panel to place supplied visual elements.
+A {\bf panel} is a frame instantiated by specific visual elements.
+
+% Modifier: visual details overlaid on frames and VEs to add semantic
+% coherence to the comic, such as floating emotes, facial expressions, motion
+% lines, word balloons, and other text.
+
+Finally, a {\bf transition} is a specification for how a panel should be
+formed as the next panel in a sequence, which we describe formally below.
+
+Transition types were first described by McCloud~\cite{mcCloud1993understanding} 
+as a means of analyzing
+comics. He gave an account of transitions including {\em moment-to-moment},
+{\em subject-to-subject}, and {\em aspect-to-aspect}, referring to changes
+in temporal state, focal subjects, and spatial point-of-view. As 
+Cohn~(\cite{cohn2013visual}, Chapter 4) points out, these transition types are
+highly contextual; they presume the audience has a semantic model of the
+story world in which the comic takes place. For the sake of
+computational generation, we derived a more {\em syntactic} notion of
+transition defined purely in terms of frames and (abstract) visual
+elements. For example, while McCloud could refer to an action-to-action
+transition as one where a character is depicted carrying out two distinct
+actions, we have no notion of {\em character} and {\em action}, so instead
+must refer to which visual elements appear and in which frame. The
+rendering of a frame itself may position VEs in such a way that an audience
+would read certain actions or meaning into it; however, this kind of
+audience interpretation is not modeled to inform generation.
+
+\subsection{Formal Transition Types}
+
+We introduce six formal transition types: {\em moment}, {\em add}, {\em
+subtract}, {\em meanwhile}, and {\em rendez-vous}, each of which specifies
+how a next panel should be constructed given the prior sequence.
+
+\begin{itemize}
+\item {\bf Moment} transitions retain the same set of VEs as the previous panel, 
+changing only the frame.
+
+\item {\bf Add} transitions introduce a VE that didn't appear in the
+previous panel, but might have appeared earlier (or might be completely
+new). A new frame may be selected.
+
+\item {\bf Subtract} transitions remove a VE from the previous panel and
+potentially choose a new frame.
+
+\item {\bf Meanwhile} transitions select a new frame and show {\em only}
+VEs that did not appear in the previous panel, potentially generating new
+VEs.
+
+\item {\bf Rendez-vous} transitions select a random subset of
+previously-appearing VEs (from anywhere in the sequence) and selects a new
+frame to accommodate them.
+\end{itemize}
+
+\subsection{Implementation}
+
+Our generator accepts as inputs length constraints (minimum and maximum)
+and a number of VEs to start with in the first panel. Its output is a
+sequence of panels (frame names and VE sets) together with a record of the
+transitions that connect them.
+
+The generation algorithm is:
+\begin{enumerate}
+\item Generate transition sequence by choosing transitions uniformly at
+random, constrained by supplied minimum and maximum length.
+\item Generate unique identifiers matching the number of specified starting
+VEs.
+\item Feed transition sequence and starting VEs to the panel sequencer,
+which selects a next frame and VE set for each new panel based on each
+transition type's definition (described above). Generate new VEs when
+necessary, updating the running pool of previously-used VEs at each
+iteration.
+\end{enumerate}
+
+% In addition to our OCaml implementation
+% XXX unblind
+% , which can be found on GitHub,\footnote{\url{http://www.github.com/chrisamaphone/comicgen}} we
+% have implemented a web front-end in JavaScript.\footnote{
+%\url{http://www.cs.cmu.edu/~cmartens/comicgen}} 
+We implemented this algorithm in OCaml and additionally implemented a
+front-end, a web-based renderer (not linked here for anonymous review). The
+renderer assigns each frame type to a set of coordinates given by
+percentage of the vertical and horizontal panel size, and then renders
+panels by placing visual elements at those coordinates. Visual elements are
+represented by randomly generated combinations of size, shape (circle or
+rectangle), and color.  An example of the generator's output can be seen in
+Figure~\ref{fig:out1}. 
+
+\begin{figure}
+\includegraphics[width=\columnwidth]{comicgen-unconstrained-ok.png}
+\caption{Example of generator output.
+While the narrative here is ambigious, we read several things into it:
+the repetition of the grey (largest) rectangle in every frame suggests it
+as a focal point, and the sudden appearance of the pink (smallest)
+rectangle suggests an interloper removing the grey rectangle from its
+initial context (established by the blue rectangle and yellow circle).
+Together with the names of the frames (reported in symbolic form above the
+comic), we can read the sequence as follows: the grey rectangle whispers to
+the blue rectangle, then is carried off by a pink rectangle, who whispers
+to the grey rectangle and then aids the grey rectangle.
+}
+\label{fig:out1}
+\end{figure}
+
+\subsection{Constraining Generation with Cohn Grammars}
+Generating random transition sequences may result in nonsensical output,
+such as ending a comic with a \emph{meanwhile} frame in which completely new
+visual elements are introduced at the end of the comic, but not connected to 
+previous elements; see Figure~\ref{fig:outbad} for an example. 
+
+\begin{figure}
+\includegraphics[width=\columnwidth]{comicgen-underconstrained-2.png}
+\caption{Example of underconstrained output. The final panel does not
+maintain relatedness to the preceding sequence.}
+\label{fig:outbad}
+\end{figure}
+
+In an attempt to understand the global structure of comic panel sequences,
+Cohn~\cite{cohn2016visual} and his colleagues investigate the {\em linguistic structure} of
+visual narratives. They claim that understandable comics follow a grammar
+that organizes its global structure. Instead of transition types, Cohn's
+grammar of comics consists of grammatical categories (analogous to nouns,
+verbs, and so on) indicating the role that each panel plays in the
+narrative. These categories are {\bf establisher}, {\bf initial}, {\bf
+prolongation}, {\bf peak}, and {\bf release}, which allow the formation of
+standard narrative patterns including the Western dramatic arc of 
+\hbox{\em initial -- peak -- release}. Formally, Cohn gives the following grammar 
+as a general template for comic ``sentences,'' or well-formed arcs:
+
+{\it (Establisher) -- (Initial (Prolongation)) -- Peak -- (Release)}
+
+\noindent Symbols in parentheses are optional. In our expression of this grammar (and
+in several of Cohn's examples), we also assume that prolongations may occur
+arbitrarily many times in sequence.
+
+Grossman built a generator based purely on Cohn's arc grammar,\footnote{
+  \url{http://www.suzigrossman.com/fineart/conceptual/Sunday_Comics_Scrambler}
+}
+picking hand-annotated panels for each of an {\em initial},
+{\em peak}, and {\em release} slot in the comic. However, this generation
+scheme does not manipulate the internal structure of the comic panels,
+allowing for less variability in the output than our scheme with visual
+elements and frames. Additionally, codifying the syntactic structure of
+individual panels allows us to characterize {\em relatedness} between
+panels as described by Saraceni~\cite{saraceni2016relatedness}. In our second
+iteration of the generator, we combine two approaches to discourse, using
+{\em global} Cohn grammars to guide the {\em local} selection of
+syntactically-defined transitions.
+
+% What I want to say is: we don't just benefit from Cohn's work;
+% he benefits from ours, because we're operationalizing semantic panel
+% roles in terms of the panel's syntactic relationship to prior panels.
+% I.e. in the linguistic metaphor, we're rejecting "panels as words" and
+% instead treating "panels as utterances" and their constituent VEs as
+% words.
+% Maybe it's worth suggesting that panels themselves could obey a grammar,
+% rather than haphazardly plugging VEs into different frame positions?
+
+In particular, we enumerate every possible category bigram in Cohn's grammar,
+such as {\em initial to prolongation}, {\em prolongation to peak}, and so
+on, and describe sets of transition types that could plausibly model the
+relationship. This mapping is given below:
+% in \fref{figure:transitions}.
+
+% \begin{figure}
+
+% \begin{table}
+
+{\scriptsize
+\begin{tabular}{lll}
+Establisher & Initial & \{Moment, Subtract, Add, RendezVous\} \\
+   Establisher & Prolongation & \{Moment, Subtract, Add\} \\
+   Establisher & Peak & \{Add, Meanwhile\} \\
+   Initial & Prolongation & \{Moment, Subtract, Add\} \\
+   Prolongation & Prolongation & \{Moment, Subtract, Add\} \\
+   Prolongation & Peak & \{Subtract, Add, RendezVous\} \\
+   Initial & Peak & \{Subtract, Add, Meanwhile, RendezVous\} \\
+   Peak & Release & \{Subtract, Add, RendezVous\}
+\end{tabular}
+}
+% \end{table}
+
+% \caption{Mapping from grammatical category bigrams to possible sequential transition types.}
+% \label{figure:transitions}
+% \end{figure}
+
+This particular mapping is guided by our intuition rather than any kind of
+systematic symbolic reasoning---we aim to rule out obvious-seeming
+syntactic errors, e.g. a \emph{meanwhile} transition at the end of an arc, but
+other constraints are not so easily expressed. For instance, perhaps a
+\emph{prolongation} should be realized as a repetition of the previous
+transition, but this information is not available in the bigram model. In
+future work, we would like to refine the theoretical grounding of the
+relationship between transitions and grammatical categories.
+
+With this mapping established, we randomly generate an instance of the
+arc grammar and populate it with an appropriate set of transitions, after
+which point we simply hook the transition sequence up to the same panel
+selector from before.
+
+Examples of the constrained generator's output can be found in
+Figures~\ref{fig:outgood} and~\ref{fig:redgreen}.
+
+
+\begin{figure}
+\includegraphics[width=0.5\textwidth]{output-constrained-canonical.png}
+\caption{Example of grammatically-constrained output.
+This example shows a common pattern in grammatically-constrained output,
+introducing a new visual element with a Meanwhile transition for the peak,
+then releasing with a Rendez-vous.
+}
+\label{fig:outgood}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=0.5\textwidth]{comicgen-output-4.png}
+\caption{Example of grammatically-constrained output
+illustrating a longer sequence with just three visual elements. Potential
+narrative readings include the green circle throwing the smaller red
+circle; the larger red circle can be seen as a different entity or as the
+extension of the smaller one. The peak of this arc is the second-to-last
+panel.
+}
+\label{fig:redgreen}
+\end{figure}
+
+
+
