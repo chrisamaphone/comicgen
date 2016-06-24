@@ -59,31 +59,25 @@ such a way that an audience would read certain actions or meaning into it;
 however, this kind of audience interpretation is not modeled to inform
 generation.
 
-\subsection{Formal Transition Types}
+% \subsection{Formal Transition Types}
 
 We introduce six formal transition types: {\em moment}, {\em add}, {\em
 subtract}, {\em meanwhile}, and {\em rendez-vous}, each of which specifies
 how a next panel should be constructed given the prior sequence.
-
-\begin{itemize}
-\item {\bf Moment} transitions retain the same set of VEs as the previous panel, 
+% XXX removing itemize to save space.
+{\bf Moment} transitions retain the same set of VEs as the previous panel, 
 changing only the frame.
-
-\item {\bf Add} transitions introduce a VE that didn't appear in the
+{\bf Add} transitions introduce a VE that didn't appear in the
 previous panel, but might have appeared earlier (or might be completely
 new). A new frame may be selected.
-
-\item {\bf Subtract} transitions remove a VE from the previous panel and
+{\bf Subtract} transitions remove a VE from the previous panel and
 potentially choose a new frame.
-
-\item {\bf Meanwhile} transitions select a new frame and show {\em only}
+{\bf Meanwhile} transitions select a new frame and show {\em only}
 VEs that did not appear in the previous panel, potentially generating new
 VEs.
-
-\item {\bf Rendez-vous} transitions select a random subset of
+{\bf Rendez-vous} transitions select a random subset of
 previously-appearing VEs (from anywhere in the sequence) and selects a new
 frame to accommodate them.
-\end{itemize}
 
 \subsection{Implementation}
 
@@ -119,8 +113,9 @@ represented by randomly generated combinations of size, shape (circle or
 rectangle), and color.  An example of the generator's output can be seen in
 Figure~\ref{fig:out1}. 
 
-\begin{figure}
-\includegraphics[width=\columnwidth]{comicgen-unconstrained-ok.png}
+\begin{figure}[h]
+\centering
+\includegraphics[width=9cm]{comicgen-unconstrained-ok.png}
 \caption{Example of generator output.
 While the narrative here is ambigious, we read several things into it:
 the repetition of the grey (largest) rectangle in every frame suggests it
@@ -135,51 +130,51 @@ to the grey rectangle and then aids the grey rectangle.
 \label{fig:out1}
 \end{figure}
 
-\subsection{Constraining Generation with Cohn Grammars}
-Generating random transition sequences may result in nonsensical output,
-such as ending a comic with a \emph{meanwhile} frame in which completely new
-visual elements are introduced at the end of the comic, but not connected to 
-previous elements; see Figure~\ref{fig:outbad} for an example. 
-
 \begin{figure}
-\includegraphics[width=\columnwidth]{comicgen-underconstrained-2.png}
+\centering
+\includegraphics[width=9cm]{comicgen-underconstrained-2.png}
 \caption{Example of underconstrained output. The final panel does not
 maintain relatedness to the preceding sequence.}
 \label{fig:outbad}
 \end{figure}
 
-In an attempt to understand the global structure of comic panel sequences,
-Cohn~\cite{cohn2016visual} and his colleagues investigate the {\em linguistic structure} of
-visual narratives. They claim that understandable comics follow a grammar
-that organizes its global structure. Instead of transition types, Cohn's
-grammar of comics consists of grammatical categories (analogous to nouns,
-verbs, and so on) indicating the role that each panel plays in the
-narrative. These categories are {\bf establisher}, {\bf initial}, {\bf
-prolongation}, {\bf peak}, and {\bf release}, which allow the formation of
-standard narrative patterns including the Western dramatic arc of 
-\hbox{\em initial -- peak -- release}. Formally, Cohn gives the following grammar 
-as a general template for comic ``sentences,'' or well-formed arcs:
+\subsection{Constraining Generation with Cohn Grammars}
+Generating random transition sequences may result in nonsensical output,
+such as ending a comic with a \emph{meanwhile} frame in which completely new
+visual elements are introduced at the end of the comic, but not connected to 
+previous elements; see Figure~\ref{fig:outbad} for an example. 
+To constrain output, we reached for work by Neil Cohn~\cite{cohn2016visual}
+and his colleagues on the linguistic structure of visual narratives. They
+claim that understandable comics follow a grammar that organizes its global
+structure. Instead of transition types, Cohn's grammar of comics consists
+of grammatical categories (analogous to nouns, verbs, and so on) indicating
+the role that each panel plays in the narrative. These categories are {\bf
+establisher}, {\bf initial}, {\bf prolongation}, {\bf peak}, and {\bf
+release}, which allow the formation of standard narrative patterns
+including the Western dramatic arc of \hbox{\em initial -- peak --
+release}. Formally, Cohn gives the following grammar as a general template
+for comic ``sentences,'' or well-formed arcs:
 
 {\it (Establisher) -- (Initial (Prolongation)) -- Peak -- (Release)}
-
-\noindent Symbols in parentheses are optional. In our expression of this grammar (and
+\footnote{Symbols in parentheses are optional. In our expression of this grammar (and
 in several of Cohn's examples), we also assume that prolongations may occur
-arbitrarily many times in sequence.
+arbitrarily many times in sequence.}
 
-Grossman built a generator based purely on Cohn's arc grammar,\footnote{
-  \url{http://www.suzigrossman.com/fineart/conceptual/Sunday_Comics_Scrambler}
-}
-picking hand-annotated panels for each of an {\em initial},
-{\em peak}, and {\em release} slot in the comic. However, this generation
-scheme does not manipulate the internal structure of the comic panels,
-allowing for less variability in the output than our scheme with visual
-elements and frames. Additionally, codifying the syntactic structure of
-individual panels allows us to characterize {\em relatedness} between
-panels as described by Saraceni~\cite{saraceni2016relatedness}. In our second
-iteration of the generator, we combine two approaches to discourse, using
-{\em global} Cohn grammars to guide the {\em local} selection of
-syntactically-defined transitions.
-
+% Grossman built a generator based purely on Cohn's arc grammar,\footnote{
+%   \url{http://www.suzigrossman.com/fineart/conceptual/Sunday_Comics_Scrambler}
+% }
+% picking hand-annotated panels for each of an {\em initial},
+% {\em peak}, and {\em release} slot in the comic. However, this generation
+% scheme does not manipulate the internal structure of the comic panels,
+% allowing for less variability in the output than our scheme with visual
+% elements and frames, and permitting more nonsensical panel juxtapositions
+% with unrelated contents. Codifying the syntactic structure of
+% individual panels allows us to characterize relatedness between
+% panels. So 
+In our second iteration of the generator, we combine two
+approaches to discourse, using {\em global} Cohn grammars to guide the {\em
+local} selection of syntactically-defined transitions.
+%
 % What I want to say is: we don't just benefit from Cohn's work;
 % he benefits from ours, because we're operationalizing semantic panel
 % roles in terms of the panel's syntactic relationship to prior panels.
@@ -188,7 +183,7 @@ syntactically-defined transitions.
 % words.
 % Maybe it's worth suggesting that panels themselves could obey a grammar,
 % rather than haphazardly plugging VEs into different frame positions?
-
+%
 In particular, we enumerate every possible category bigram in Cohn's grammar,
 such as {\em initial to prolongation}, {\em prolongation to peak}, and so
 on, and describe sets of transition types that could plausibly model the
@@ -230,13 +225,13 @@ With this mapping established, we randomly generate an instance of the
 arc grammar and populate it with an appropriate set of transitions, after
 which point we simply hook the transition sequence up to the same panel
 selector from before.
-
 Examples of the constrained generator's output can be found in
 Figures~\ref{fig:outgood} and~\ref{fig:redgreen}.
 
 
 \begin{figure}
-\includegraphics[width=\columnwidth]{output-constrained-canonical.png}
+\centering
+\includegraphics[width=9cm]{output-constrained-canonical.png}
 \caption{Example of grammatically-constrained output.
 This example shows a common pattern in grammatically-constrained output,
 introducing a new visual element with a Meanwhile transition for the peak,
@@ -246,7 +241,8 @@ then releasing with a Rendez-vous.
 \end{figure}
 
 \begin{figure}
-\includegraphics[width=\columnwidth]{comicgen-output-4.png}
+\centering
+\includegraphics[width=9cm]{comicgen-output-4.png}
 \caption{Example of grammatically-constrained output
 illustrating a longer sequence with just three visual elements. Potential
 narrative readings include the green circle throwing the smaller red
