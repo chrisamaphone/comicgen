@@ -9,6 +9,23 @@ to make sense of these terms: the symbolic level, i.e. the intermediate,
 human-readable program datastructures representing a comic, and the
 rendered level, designed to be consumed by human visual perception.
 
+\begin{figure}[h]
+\centering
+\includegraphics[width=9cm]{comicgen-unconstrained-ok.png}
+\caption{\small Example of generator output.
+While the narrative here is ambiguous, we suggest the following readings:
+the repetition of the grey (largest) rectangle in every frame suggests it
+as a focal point, and the sudden appearance of the pink (smallest)
+rectangle suggests an interloper removing the grey rectangle from its
+initial context (established by the blue rectangle and yellow circle).
+Together with the names of the frames (reported in symbolic form above the
+comic), we can read the sequence as follows: the grey rectangle whispers to
+the blue rectangle, then is carried off by a pink rectangle, who whispers
+to the grey rectangle and then aids the grey rectangle.
+}
+\label{fig:out1}
+\end{figure}
+
 A {\bf visual element (VE)} is a unique identifier from an infinite set,
 each of which is possible to map to a distinct visual representation.
 We do not explicitly tag visual elements with their roles in the narrative,
@@ -16,7 +33,7 @@ such as characters, props, or scenery, making the symbolic representation
 agnostic to which of these narrative interpretations will apply. In the
 visual rendering, of course, our representation choices will influence
 readers' interpretation of VEs' narrative roles.
-
+%
 A {\bf frame} is a panel template; at the symbolic level, it
 includes an identifier or set of tags and a minimum number of required
 visual elements. The reason a frame specifies a {\em minimum} number of VEs
@@ -27,11 +44,11 @@ included as bystanding characters or scenery elements.
 At the rendering level, a frame includes instructions for where in the
 panel to place supplied visual elements.
 A {\bf panel} is a frame instantiated by specific visual elements.
-
+%
 % Modifier: visual details overlaid on frames and VEs to add semantic
 % coherence to the comic, such as floating emotes, facial expressions, motion
 % lines, word balloons, and other text.
-
+%
 Finally, a {\bf transition} is a specification for how a panel should be
 formed as the next panel in a sequence.
 %
@@ -79,6 +96,8 @@ VEs.
 previously-appearing VEs (from anywhere in the sequence) and selects a new
 frame to accommodate them.
 
+
+
 % \subsection{Implementation}
 
 We implemented our generator in OCaml and additionally implemented a
@@ -113,22 +132,6 @@ transitions that connect them.
 % have implemented a web front-end in JavaScript.\footnote{
 %\url{http://www.cs.cmu.edu/~cmartens/comicgen}} 
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=9cm]{comicgen-unconstrained-ok.png}
-\caption{Example of generator output.
-While the narrative here is ambigious, we read several things into it:
-the repetition of the grey (largest) rectangle in every frame suggests it
-as a focal point, and the sudden appearance of the pink (smallest)
-rectangle suggests an interloper removing the grey rectangle from its
-initial context (established by the blue rectangle and yellow circle).
-Together with the names of the frames (reported in symbolic form above the
-comic), we can read the sequence as follows: the grey rectangle whispers to
-the blue rectangle, then is carried off by a pink rectangle, who whispers
-to the grey rectangle and then aids the grey rectangle.
-}
-\label{fig:out1}
-\end{figure}
 
 \begin{figure}
 \centering
