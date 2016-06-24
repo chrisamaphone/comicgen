@@ -33,25 +33,31 @@ A {\bf panel} is a frame instantiated by specific visual elements.
 % lines, word balloons, and other text.
 
 Finally, a {\bf transition} is a specification for how a panel should be
-formed as the next panel in a sequence, which we describe formally below.
-
-Transition types were first described by McCloud~\cite{mcCloud1993understanding} 
-as a means of analyzing
-comics. He gave an account of transitions including {\em moment-to-moment},
-{\em subject-to-subject}, and {\em aspect-to-aspect}, referring to changes
-in temporal state, focal subjects, and spatial point-of-view. As 
-Cohn~\cite{cohn2013visual} (Chapter 4) points out, these transition types are
-highly contextual; they presume the audience has a semantic model of the
-story world in which the comic takes place. For the sake of
-computational generation, we derived a more {\em syntactic} notion of
-transition defined purely in terms of frames and (abstract) visual
-elements. For example, while McCloud could refer to an action-to-action
-transition as one where a character is depicted carrying out two distinct
-actions, we have no notion of {\em character} and {\em action}, so instead
-must refer to which visual elements appear and in which frame. The
-rendering of a frame itself may position VEs in such a way that an audience
-would read certain actions or meaning into it; however, this kind of
-audience interpretation is not modeled to inform generation.
+formed as the next panel in a sequence.
+%
+% Now said in prev section
+% Transition types were first described by McCloud~\cite{mcCloud1993understanding} 
+% as a means of analyzing
+% comics. He gave an account of transitions including {\em moment-to-moment},
+% {\em subject-to-subject}, and {\em aspect-to-aspect}, referring to changes
+% in temporal state, focal subjects, and spatial point-of-view. As 
+% Cohn~\cite{cohn2013visual} (Chapter 4) points out, these transition types are
+% highly contextual; they presume the audience has a semantic model of the
+% story world in which the comic takes place. 
+We took inspiration from McCloud
+transitions~\cite{mcCloud1993understanding}, developing a more
+syntactic notion  defined purely in terms of frames and (abstract) visual
+elements, for which Saraceni's theory of
+relatedness~\cite{saraceni2016relatedness} could be applied. For example,
+while McCloud could refer to an action-to-action transition as one where a
+character is depicted carrying out two distinct actions, we have no notion
+of {\em character} and {\em action} (these being semantic and contextual
+categories), so instead must refer to which visual elements appear, where
+they have appeared previously, and what their spatial relationships might
+be (potential frames). The rendering of a frame itself may position VEs in
+such a way that an audience would read certain actions or meaning into it;
+however, this kind of audience interpretation is not modeled to inform
+generation.
 
 \subsection{Formal Transition Types}
 
