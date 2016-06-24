@@ -79,32 +79,9 @@ VEs.
 previously-appearing VEs (from anywhere in the sequence) and selects a new
 frame to accommodate them.
 
-\subsection{Implementation}
+% \subsection{Implementation}
 
-Our generator accepts as inputs length constraints (minimum and maximum)
-and a number of VEs to start with in the first panel. Its output is a
-sequence of panels (frame names and VE sets) together with a record of the
-transitions that connect them.
-
-The generation algorithm is:
-\begin{enumerate}
-\item Generate transition sequence by choosing transitions uniformly at
-random, constrained by supplied minimum and maximum length.
-\item Generate unique identifiers matching the number of specified starting
-VEs.
-\item Feed transition sequence and starting VEs to the panel sequencer,
-which selects a next frame and VE set for each new panel based on each
-transition type's definition (described above). Generate new VEs when
-necessary, updating the running pool of previously-used VEs at each
-iteration.
-\end{enumerate}
-
-% In addition to our OCaml implementation
-% XXX unblind
-% , which can be found on GitHub,\footnote{\url{http://www.github.com/chrisamaphone/comicgen}} we
-% have implemented a web front-end in JavaScript.\footnote{
-%\url{http://www.cs.cmu.edu/~cmartens/comicgen}} 
-We implemented this algorithm in OCaml and additionally implemented a
+We implemented our generator in OCaml and additionally implemented a
 front-end, a web-based renderer (not linked here for anonymous review). The
 renderer assigns each frame type to a set of coordinates given by
 percentage of the vertical and horizontal panel size, and then renders
@@ -112,6 +89,29 @@ panels by placing visual elements at those coordinates. Visual elements are
 represented by randomly generated combinations of size, shape (circle or
 rectangle), and color.  An example of the generator's output can be seen in
 Figure~\ref{fig:out1}. 
+The generator accepts as inputs length constraints (minimum and maximum)
+and a number of VEs to start with in the first panel. Its output is a
+sequence of panels (frame names and VE sets) together with a record of the
+transitions that connect them.
+% 
+% The generation algorithm is:
+% \begin{enumerate}
+% \item Generate transition sequence by choosing transitions uniformly at
+% random, constrained by supplied minimum and maximum length.
+% \item Generate unique identifiers matching the number of specified starting
+% VEs.
+% \item Feed transition sequence and starting VEs to the panel sequencer,
+% which selects a next frame and VE set for each new panel based on each
+% transition type's definition (described above). Generate new VEs when
+% necessary, updating the running pool of previously-used VEs at each
+% iteration.
+% \end{enumerate}
+
+% In addition to our OCaml implementation
+% XXX unblind
+% , which can be found on GitHub,\footnote{\url{http://www.github.com/chrisamaphone/comicgen}} we
+% have implemented a web front-end in JavaScript.\footnote{
+%\url{http://www.cs.cmu.edu/~cmartens/comicgen}} 
 
 \begin{figure}[h]
 \centering
@@ -212,16 +212,17 @@ Establisher & Initial & \{Moment, Subtract, Add, RendezVous\} \\
 % \label{figure:transitions}
 % \end{figure}
 
-This particular mapping is guided by our intuition rather than any kind of
-systematic symbolic reasoning---we aim to rule out obvious-seeming
+\newcommand{\caveat}{
+This mapping is guided by our intuition rather than 
+systematic symbolic reasoning. We aim to rule out obvious-seeming
 syntactic errors, e.g. a \emph{meanwhile} transition at the end of an arc, but
 other constraints are not so easily expressed. For instance, perhaps a
 \emph{prolongation} should be realized as a repetition of the previous
 transition, but this information is not available in the bigram model. In
 future work, we would like to refine the theoretical grounding of the
-relationship between transitions and grammatical categories.
+relationship between transitions and grammatical categories.}
 
-With this mapping established, we randomly generate an instance of the
+With this mapping established\footnote{\caveat}, we randomly generate an instance of the
 arc grammar and populate it with an appropriate set of transitions, after
 which point we simply hook the transition sequence up to the same panel
 selector from before.
