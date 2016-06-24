@@ -1,29 +1,29 @@
 %================================================================
-\section{On Generating Comics}
+\section{Generating Comics}
 
 Skilled authors convey their stories with knowledge of how information is
 likely to be processed by an audience.  Readers learn to optimize their
 consumption of relevant information~\cite{pirolli2007information}, and work
 to construct inferences~\cite{magliano2016filling} about story content in
 the liminal spaces of discourse (in between sentences in text, panels in
-comics, scenes in film); inferences for story content are constructed when
-they are \emph{needed} for comprehension, and \emph{enabled} by what has
-been narrated thus far~\cite{myers1987degree}. All told, the dynamic
+comics, scenes in film). Inferences for story content are constructed when
+they are needed for comprehension and enabled by what has
+been narrated thus far~\cite{myers1987degree}. The dynamic
 between story authors and audiences parallels the dynamics of people
 engaged in cooperative conversation as outlined by the philosopher of
 language Grice~\cite{grice1975logic}: the storyteller, as the active contributor
 to the ongoing communicative context, is expected to make her contributions
 to the discourse based on what is relevant to her narrative intent. 
-As Murray~\cite{murray2011why} states:
-%
-\begin{quote} 
-	In a mature medium nothing happens, nothing is brought on stage (or screen 
-	or comic book panel or described in prose) that does not in some way further 
-	the action. Whatever the viewer is invited to direct attention to is
-	something that further defines the role ([of a] character) or the function 
-	(dramatic beat). 
-	\end{quote}
-%
+% As Murray~\cite{murray2011why} states:
+% %
+% \begin{quote} 
+% 	In a mature medium nothing happens, nothing is brought on stage (or screen 
+% 	or comic book panel or described in prose) that does not in some way further 
+% 	the action. Whatever the viewer is invited to direct attention to is
+% 	something that further defines the role ([of a] character) or the function 
+% 	(dramatic beat). 
+% 	\end{quote}
+% %
 These expectations give rise to narrative devices such as \emph{Chekhov's
 gun}, wherein narrative elements are introduced because they are relevant, 
 and they ultimately demonstrate their relevance at some point in the story.
@@ -31,18 +31,16 @@ Narrative authors can at the same time flout this expectation of
 cooperativity in service of a counterpart narrative device, the 
 \emph{red herring}, wherein a story element is introduced and which
 ultimately has no relevance to the unfolding story.
-
-Thus, for the enterprise of computational narratology, it seems prudent to
-encode the constraints and effects of narrative discourse, since (as the
-primary point of contact with the narrative artifact) narrative discourse
-carries with it expectations and conventions that ultimately affect how
-story consumers understand the narrative. While we acknowledge that
-coherent story structure is important for
-comprehension~\cite{graesser2002how}, the audience recovers that structure
-only insofar as it is afforded by the discourse structure. 
-
-%\note{CRM}{Somewhere in the below commentary, it would make sense to cite
-%~\cite{heider1944experimental}; I'm not sure where.}
+% 
+% Thus, for narrative generation, we seek to represent the constraints and
+% effects of narrative discourse, since (as the primary point of contact with
+% the narrative artifact) narrative discourse carries with it expectations
+% and conventions that ultimately affect how story consumers understand the
+% narrative. 
+% 
+% While coherent story structure is important for
+% comprehension~\cite{graesser2002how}, the audience recovers that structure
+% only insofar as it is afforded by the discourse structure. 
 
 {\em Purely visual comics}, or sequences of visual imagery arranged in
 panels, present an excellent avenue along which to study discourse
@@ -59,12 +57,13 @@ text~\cite{saraceni2016relatedness}: they are both made up of individual
 elements (sentences in text, panels in comics), delimited by special-purpose
 symbols (full stops in text, panel borders in comics), which can be easily
 identified, and which can contain a variable amount of information. However,
-unlike text, comics afford an additional \emph{pictorial} dimension through
+unlike text, comics afford an additional pictorial dimension through
 which to express information via a palette of visual elements and their spatial
-relationships to one another, e.g. their relative size, rotation, horizontal and
-vertical juxtaposition, and distance. While in general comics offer two
-dimensions of authorship affordances (textual and visual language), in this work
-we are concerned only with the pictorial dimension.
+relationships to one another, which we might model in terms of their
+relative size, rotation, horizontal and vertical juxtaposition, and
+distance. While in general comics offer two dimensions of authorship
+affordances (textual and visual language), in this work we are concerned
+only with the pictorial dimension.
 %
 \begin{figure}
 	\includegraphics[width=\columnwidth]{relatedness.png}
@@ -83,7 +82,8 @@ we are concerned only with the pictorial dimension.
 \end{figure}
 %
 Saraceni~\cite{saraceni2016relatedness} describes three notions of
-\emph{relatedness} between comic elements.
+\emph{relatedness} between comic elements, which are the building blocks
+from which readers may construct meaning inferences.
 Relatedness, a property of a comic that indicates how its panels are
 connected or associated, depends on a comic's \emph{cohesion} -- the
 lexico-grammatical features that tie panels together -- and \emph{coherence} --
