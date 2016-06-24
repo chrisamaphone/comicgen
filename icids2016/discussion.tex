@@ -1,78 +1,98 @@
 %================================================================
-\section{Future Work}
+\section{Limitations and Future Work}
 
-There are three main avenues that we would like to explore to further develop
-this work: refining our discourse model, expanding the system's
-expressivity, and evaluating the generator.
+%There are three main avenues that we would like to explore to further develop
+%this work: refining our discourse model, expanding the system's
+%expressivity, and evaluating the generator.
 
-First, while our interpretation serves as a promising proof-of-concept for
+While our interpretation serves as a promising proof-of-concept for
 concretely interpreting theories of panel relatedness and visual grammar,
 we have identified a few limitations of our specific implementation
-choices.  First of all, our choice to represent a panel as a frame and,
+choices.  Our choice to represent a panel as a frame and,
 independently, a set of VEs, means that VEs' relationship to the frame, or
 a VE's role in prior frames, is not available or manipulable.  By analogy
 with textual and verbal language, if a panel is analogous to a sentence,
 then we have grammar at the paragraph (narrative arc) level, but not at
-the sentence level.  Second, our choice to generate a transition sequence
-constrained by a grammar and {\em then} feed the transitions to a panel
-generator, itself a kind of pipeline model, means that the panel generator
+the sentence level.  Also, our choice to generate a transition sequence
+constrained by a grammar and {then} feed the transitions to a panel
+generator (itself a kind of pipeline model) means that the panel generator
 cannot reflect on the grammatical role of panels to guide its selection.
+%
+To address these above issues, future work will use linguistic theories to 
+generate panel internals by assigning grammatical roles to VEs that 
+pertain to their visual rendering (such as character, prop, or backdrop), 
+then using those roles consistently across panel sequences. Further, we
+will seek to reformulate transitions in terms of {\em edits} on previous 
+panels they are related to, and incorporate theories of semantic scene 
+composition (e.g. \cite{zitnick2013bringing}) to reason over the grammatical
+role of panels in sequence.
 
-In a second iteration of the project, we would make the following changes:
-\begin{itemize}
-\item Use linguistic theories to generate panel internals by assigning
-grammatical roles to VEs that pertain to their visual rendering (such as
-character, prop, or backdrop), then use those roles consistently across
-panel sequences.
-\item On the visual rendering level, modify visual elements and frame
-descriptions to reason over notions such as scaling, zooming, backdrops,
-layers, and overlap among visual elements. We intend to study theories of
-semantic scene composition, such as~\cite{zitnick2013bringing}, as a more
-principled basis for panel generation.
-\item Reformulate transitions in terms of {\em edits} on previous panels
-that they are meant to be related to, rather than simply repeating VE sets.
-Constrain the choice of frame as well.
-\end{itemize}
+%
+%
+%that they are meant to be related to, rather than simply repeating VE sets.
+%Constrain the choice of frame as well.
+%
+%
+%
+%
+%intend to incorporate theories of semantic scene composition 
+%(e.g. \cite{zitnick2013bringing}), to expand.
+%
+%Further, we
+%intend to 
+%
+%% In a second iteration of the project, we would make the following changes:
+%\begin{itemize}
+%\item use linguistic theories to generate panel internals by assigning
+%grammatical roles to VEs that pertain to their visual rendering (such as
+%character, prop, or backdrop), then use those roles consistently across
+%panel sequences.
+%\item On the visual rendering level, modify visual elements and frame
+%descriptions to reason over notions such as scaling, zooming, backdrops,
+%layers, and overlap among visual elements. We intend to study theories of
+%semantic scene composition, such as~\cite{zitnick2013bringing}, as a more
+%principled basis for panel generation.
+%\item Reformulate transitions in terms of {\em edits} on previous panels
+%that they are meant to be related to, rather than simply repeating VE sets.
+%Constrain the choice of frame as well.
+%\end{itemize}
 
-The second avenue of future work is to extend the system's expressivity.
-Currently, our system cannot reason about the following key aspects of
-comics:
-\begin{itemize}
-\item Text and images together, including captions and speech bubbles
-\item Hierarchically structured comics, such as two-dimensional panel
-arrays that need to have coherence and cohesion at the level of panel {\em
-rows}, and multi-page comics or graphic novels that need coherence and
-cohesion at the level of comic {\em pages}.
-\item Interactive comics. The
-Storyteller\footnote{\url{http://www.storyteller-game.com/p/about-storyteller.html}}
-system in particular suggests an intriguing basis for comic-based play in
-which players select visual elements to populate a panel, and a reasoning
-engine finds a frame that connects it narratively to the panels on either side.
-Such a system could also form the basis of a mixed-initiative comic design
-tool.
-\end{itemize}
+%The second avenue of future work is to extend the system's expressivity.
+%Currently, our system cannot reason about the following key aspects of
+%comics:
+%\begin{itemize}
+%\item Text and images together, including captions and speech bubbles
+%\item Hierarchically structured comics, such as two-dimensional panel
+%arrays that need to have coherence and cohesion at the level of panel {\em
+%rows}, and multi-page comics or graphic novels that need coherence and
+%cohesion at the level of comic {\em pages}.
+%\item Interactive comics. The
+%Storyteller\footnote{\url{http://www.storyteller-game.com/p/about-storyteller.html}}
+%system in particular suggests an intriguing basis for comic-based play in
+%which players select visual elements to populate a panel, and a reasoning
+%engine finds a frame that connects it narratively to the panels on either side.
+%Such a system could also form the basis of a mixed-initiative comic design
+%tool.
+%\end{itemize}
 
-Our third avenue of future work is to empirically evaluate our system.  We
-have several potential evaluation plans, each investigating distinct
-hypotheses about our approach.
 
-One candidate involves analyzing the style and variety of our
+Another avenue of future work is to empirically evaluate our system.
+One candidate evaluation involves analyzing the style and variety of our
 comic generator's output; i.e. our system's 
-\emph{expressive range}~\cite{smith2010analyzing}. For this, and as
-suggested by Smith and Whitehead, we would need to identify
-appropriate metrics for describing the generated output, which ``should be
-based on global properties \ldots and ideally should be emergent qualities
-from the point of view of the generator.'' A textually-focused candidate 
-metric is the number and type of transitions that are generated on average
-in a large sample of generated comics. A cognitively-focused candidate
-metric is the average number of unique readings that an audience comes up
-with for generated comics. Further, these metrics should be evaluated in
-the context of the discourse grammar's \emph{cyclomatic
-complexity}~\cite{mccabe1976complexity}, which in our case is low; such an
-analysis will yield insight into the representational power that the
-grammar has for generating narrative discourse, relative to the system's
-overall computational complexity.
-
+\emph{expressive range}~\cite{smith2010analyzing}. Some metrics based
+on global properties that are emergent from the point of view of the
+generator include\begin{inparaenum}[(a)]
+	\item the number and type of transitions that are generated on average, and
+	\item the average number of unique readings that an audience comes up
+with for generated comics.
+\end{inparaenum}
+%
+%These metrics should be evaluated in the context of the discourse grammar's 
+%\emph{cyclomatic complexity}~\cite{mccabe1976complexity}, which in our case is low; 
+%such an analysis will yield insight into the representational power that the
+%grammar has for generating narrative discourse, relative to the system's
+%overall computational complexity.
+%
 Another candidate evaluation involves analyzing the level of comprehension
 that our generated comics afford an audience. While there has been work in
 understanding how people read into narratives involving abstract

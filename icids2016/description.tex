@@ -6,7 +6,7 @@ panels, choosing randomly among indistinguishably-valid choices.
 The concepts we represent formally are {\em transitions}, {\em frames}, and
 {\em visual elements}, which we define below. There are two levels on which
 to make sense of these terms: the symbolic level, i.e. the intermediate,
-human-readable program datastructures representing a comic, and the
+human-readable program data structures representing a comic, and the
 rendered level, designed to be consumed by human visual perception.
 
 A {\bf visual element (VE)} is a unique identifier from an infinite set,
@@ -19,13 +19,13 @@ readers' interpretation of VEs' narrative roles.
 
 A {\bf frame} is a panel template; at the symbolic level, it
 includes an identifier or set of tags and a minimum number of required
-visual elements. The reason a frame specifies a {\em minimum} number of VEs
+visual elements. The reason a frame specifies a {minimum} number of VEs
 is to allow for augmentation of the frame with pre-existing elements: for
 example, the {\em monologue} frame requires at least one visual element,
 indicating a single, central focal point, but other visual elements may be
 included as bystanding characters or scenery elements.
 At the rendering level, a frame includes instructions for where in the
-panel to place supplied visual elements.
+panel to place supplied VEs.
 A {\bf panel} is a frame instantiated by specific visual elements.
 
 % Modifier: visual details overlaid on frames and VEs to add semantic
@@ -75,8 +75,9 @@ VEs that did not appear in the previous panel, potentially generating new
 VEs.
 
 \item {\bf Rendez-vous} transitions select a random subset of
-previously-appearing VEs (from anywhere in the sequence) and selects a new
-frame to accommodate them.
+previously-appearing VEs 
+% (from anywhere in the sequence) 
+and selects a new frame to accommodate them.
 \end{itemize}
 
 \subsection{Implementation}
@@ -84,9 +85,8 @@ frame to accommodate them.
 Our generator accepts as inputs length constraints (minimum and maximum)
 and a number of VEs to start with in the first panel. Its output is a
 sequence of panels (frame names and VE sets) together with a record of the
-transitions that connect them.
+transitions that connect them. The generation algorithm is:
 
-The generation algorithm is:
 \begin{enumerate}
 \item Generate transition sequence by choosing transitions uniformly at
 random, constrained by supplied minimum and maximum length.
@@ -114,7 +114,8 @@ rectangle), and color.  An example of the generator's output can be seen in
 Figure~\ref{fig:out1}. 
 
 \begin{figure}
-\includegraphics[width=\columnwidth]{comicgen-unconstrained-ok.png}
+\centering
+\includegraphics[width=0.8\columnwidth]{comicgen-unconstrained-ok.png}
 \caption{Example of generator output.
 While the narrative here is ambigious, we read several things into it:
 the repetition of the grey (largest) rectangle in every frame suggests it
@@ -135,15 +136,16 @@ such as ending a comic with a \emph{meanwhile} frame in which completely new
 visual elements are introduced at the end of the comic, but not connected to 
 previous elements; see Figure~\ref{fig:outbad} for an example. 
 
-\begin{figure}
-\includegraphics[width=\columnwidth]{comicgen-underconstrained-2.png}
+\begin{figure}[b]
+\centering
+\includegraphics[width=0.8\columnwidth]{comicgen-underconstrained-2.png}
 \caption{Example of underconstrained output. The final panel does not
 maintain relatedness to the preceding sequence.}
 \label{fig:outbad}
 \end{figure}
 
 In an attempt to understand the global structure of comic panel sequences,
-Cohn~\cite{cohn2016visual} and his colleagues investigate the {\em linguistic structure} of
+Cohn and his colleagues~\cite{cohn2016visual} investigate the {\em linguistic structure} of
 visual narratives. They claim that understandable comics follow a grammar
 that organizes its global structure. Instead of transition types, Cohn's
 grammar of comics consists of grammatical categories (analogous to nouns,
@@ -154,7 +156,9 @@ standard narrative patterns including the Western dramatic arc of
 \hbox{\em initial -- peak -- release}. Formally, Cohn gives the following grammar 
 as a general template for comic ``sentences,'' or well-formed arcs:
 
+\begin{quotation}
 {\it (Establisher) -- (Initial (Prolongation)) -- Peak -- (Release)}
+\end{quotation}
 
 \noindent Symbols in parentheses are optional. In our expression of this grammar (and
 in several of Cohn's examples), we also assume that prolongations may occur
@@ -192,8 +196,8 @@ relationship. This mapping is given below:
 % \begin{figure}
 
 % \begin{table}
-
-{\scriptsize
+\begin{quotation}
+{\small
 \begin{tabular}{lll}
 Establisher & Initial & \{Moment, Subtract, Add, RendezVous\} \\
    Establisher & Prolongation & \{Moment, Subtract, Add\} \\
@@ -205,6 +209,7 @@ Establisher & Initial & \{Moment, Subtract, Add, RendezVous\} \\
    Peak & Release & \{Subtract, Add, RendezVous\}
 \end{tabular}
 }
+\end{quotation}
 % \end{table}
 
 % \caption{Mapping from grammatical category bigrams to possible sequential transition types.}
@@ -223,14 +228,13 @@ relationship between transitions and grammatical categories.
 With this mapping established, we randomly generate an instance of the
 arc grammar and populate it with an appropriate set of transitions, after
 which point we simply hook the transition sequence up to the same panel
-selector from before.
-
-Examples of the constrained generator's output can be found in
-Figures~\ref{fig:outgood} and~\ref{fig:redgreen}.
+selector from before. Examples of the constrained generator's output can 
+be found in Figures~\ref{fig:outgood} and~\ref{fig:redgreen}.
 
 
-\begin{figure}
-\includegraphics[width=\columnwidth]{output-constrained-canonical.png}
+\begin{figure}[tb]
+\centering
+\includegraphics[width=0.8\columnwidth]{output-constrained-canonical.png}
 \caption{Example of grammatically-constrained output.
 This example shows a common pattern in grammatically-constrained output,
 introducing a new visual element with a Meanwhile transition for the peak,
@@ -238,9 +242,10 @@ then releasing with a Rendez-vous.
 }
 \label{fig:outgood}
 \end{figure}
-
-\begin{figure}
-\includegraphics[width=\columnwidth]{comicgen-output-4.png}
+%
+\begin{figure}[tb]
+\centering
+\includegraphics[width=0.8\columnwidth]{comicgen-output-4.png}
 \caption{Example of grammatically-constrained output
 illustrating a longer sequence with just three visual elements. Potential
 narrative readings include the green circle throwing the smaller red
