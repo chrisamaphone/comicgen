@@ -6,7 +6,7 @@ panels, choosing randomly among indistinguishably-valid choices.
 The concepts we represent formally are {\em transitions}, {\em frames}, and
 {\em visual elements}, which we define below. There are two levels on which
 to make sense of these terms: the symbolic level, i.e. the intermediate,
-human-readable program datastructures representing a comic, and the
+human-readable program data structures representing a comic, and the
 rendered level, designed to be consumed by human visual perception.
 
 \begin{figure}[h]
@@ -36,13 +36,13 @@ readers' interpretation of VEs' narrative roles.
 %
 A {\bf frame} is a panel template; at the symbolic level, it
 includes an identifier or set of tags and a minimum number of required
-visual elements. The reason a frame specifies a {\em minimum} number of VEs
+visual elements. The reason a frame specifies a {minimum} number of VEs
 is to allow for augmentation of the frame with pre-existing elements: for
 example, the {\em monologue} frame requires at least one visual element,
 indicating a single, central focal point, but other visual elements may be
 included as bystanding characters or scenery elements.
 At the rendering level, a frame includes instructions for where in the
-panel to place supplied visual elements.
+panel to place supplied VEs.
 A {\bf panel} is a frame instantiated by specific visual elements.
 %
 % Modifier: visual details overlaid on frames and VEs to add semantic
@@ -93,12 +93,10 @@ potentially choose a new frame.
 VEs that did not appear in the previous panel, potentially generating new
 VEs.
 {\bf Rendez-vous} transitions select a random subset of
-previously-appearing VEs (from anywhere in the sequence) and selects a new
-frame to accommodate them.
+previously-appearing VEs 
+% (from anywhere in the sequence) 
+and selects a new frame to accommodate them.
 
-
-
-% \subsection{Implementation}
 
 We implemented our generator in OCaml and additionally implemented a
 front-end, a web-based renderer (not linked here for anonymous review). The
@@ -112,36 +110,41 @@ The generator accepts as inputs length constraints (minimum and maximum)
 and a number of VEs to start with in the first panel. Its output is a
 sequence of panels (frame names and VE sets) together with a record of the
 transitions that connect them.
-% 
-% The generation algorithm is:
-% \begin{enumerate}
-% \item Generate transition sequence by choosing transitions uniformly at
-% random, constrained by supplied minimum and maximum length.
-% \item Generate unique identifiers matching the number of specified starting
-% VEs.
-% \item Feed transition sequence and starting VEs to the panel sequencer,
-% which selects a next frame and VE set for each new panel based on each
-% transition type's definition (described above). Generate new VEs when
-% necessary, updating the running pool of previously-used VEs at each
-% iteration.
-% \end{enumerate}
 
 % In addition to our OCaml implementation
 % XXX unblind
 % , which can be found on GitHub,\footnote{\url{http://www.github.com/chrisamaphone/comicgen}} we
 % have implemented a web front-end in JavaScript.\footnote{
 %\url{http://www.cs.cmu.edu/~cmartens/comicgen}} 
+% =======
+% \begin{figure}
+% \centering
+% \includegraphics[width=0.8\columnwidth]{comicgen-unconstrained-ok.png}
+% \caption{Example of generator output.
+% While the narrative here is ambigious, we read several things into it:
+% the repetition of the grey (largest) rectangle in every frame suggests it
+% as a focal point, and the sudden appearance of the pink (smallest)
+% rectangle suggests an interloper removing the grey rectangle from its
+% initial context (established by the blue rectangle and yellow circle).
+% Together with the names of the frames (reported in symbolic form above the
+% comic), we can read the sequence as follows: the grey rectangle whispers to
+% the blue rectangle, then is carried off by a pink rectangle, who whispers
+% to the grey rectangle and then aids the grey rectangle.
+% }
+% \label{fig:out1}
+% \end{figure}
+% >>>>>>> recardona/writing
+% XXX CRM: consider adding the above back in 
 
-
-\begin{figure}
+\begin{figure}[b]
 \centering
-\includegraphics[width=9cm]{comicgen-underconstrained-2.png}
+\includegraphics[width=0.8\columnwidth]{comicgen-underconstrained-2.png}
 \caption{Example of underconstrained output. The final panel does not
 maintain relatedness to the preceding sequence.}
 \label{fig:outbad}
 \end{figure}
 
-\subsection{Constraining Generation with Cohn Grammars}
+% \subsection{Constraining Generation with Cohn Grammars}
 Generating random transition sequences may result in nonsensical output,
 such as ending a comic with a \emph{meanwhile} frame in which completely new
 visual elements are introduced at the end of the comic, but not connected to 
@@ -158,10 +161,12 @@ including the Western dramatic arc of \hbox{\em initial -- peak --
 release}. Formally, Cohn gives the following grammar as a general template
 for comic ``sentences,'' or well-formed arcs:
 
+\begin{quotation}
 {\it (Establisher) -- (Initial (Prolongation)) -- Peak -- (Release)}
 \footnote{Symbols in parentheses are optional. In our expression of this grammar (and
 in several of Cohn's examples), we also assume that prolongations may occur
 arbitrarily many times in sequence.}
+\end{quotation}
 
 % Grossman built a generator based purely on Cohn's arc grammar,\footnote{
 %   \url{http://www.suzigrossman.com/fineart/conceptual/Sunday_Comics_Scrambler}
@@ -196,8 +201,8 @@ relationship. This mapping is given below:
 % \begin{figure}
 
 % \begin{table}
-
-{\scriptsize
+\begin{quotation}
+{\small
 \begin{tabular}{lll}
 Establisher & Initial & \{Moment, Subtract, Add, RendezVous\} \\
    Establisher & Prolongation & \{Moment, Subtract, Add\} \\
@@ -209,6 +214,7 @@ Establisher & Initial & \{Moment, Subtract, Add, RendezVous\} \\
    Peak & Release & \{Subtract, Add, RendezVous\}
 \end{tabular}
 }
+\end{quotation}
 % \end{table}
 
 % \caption{Mapping from grammatical category bigrams to possible sequential transition types.}
@@ -228,14 +234,12 @@ relationship between transitions and grammatical categories.}
 With this mapping established\footnote{\caveat}, we randomly generate an instance of the
 arc grammar and populate it with an appropriate set of transitions, after
 which point we simply hook the transition sequence up to the same panel
-selector from before.
-Examples of the constrained generator's output can be found in
-Figures~\ref{fig:outgood} and~\ref{fig:redgreen}.
+selector from before. Examples of the constrained generator's output can 
+be found in Figures~\ref{fig:outgood} and~\ref{fig:redgreen}.
 
-
-\begin{figure}
+\begin{figure}[tb]
 \centering
-\includegraphics[width=9cm]{output-constrained-canonical.png}
+\includegraphics[width=0.8\columnwidth]{output-constrained-canonical.png}
 \caption{Example of grammatically-constrained output.
 This example shows a common pattern in grammatically-constrained output,
 introducing a new visual element with a Meanwhile transition for the peak,
@@ -244,9 +248,10 @@ then releasing with a Rendez-vous.
 \label{fig:outgood}
 \end{figure}
 
-\begin{figure}
+%
+\begin{figure}[tb]
 \centering
-\includegraphics[width=9cm]{comicgen-output-4.png}
+\includegraphics[width=0.8\columnwidth]{comicgen-output-4.png}
 \caption{Example of grammatically-constrained output
 illustrating a longer sequence with just three visual elements. Potential
 narrative readings include the green circle throwing the smaller red

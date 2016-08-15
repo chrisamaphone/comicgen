@@ -1,23 +1,18 @@
 %================================================================
-\section{Future Work}
+\section{Limitations and Future Work}
 
-There are three main avenues that we would like to explore to further develop
-this work: refining our discourse model, expanding the system's
-expressivity, and evaluating the generator.
-%
-First, while our interpretation serves as a promising proof-of-concept for
+While our interpretation serves as a promising proof-of-concept for
 concretely interpreting theories of panel relatedness and visual grammar,
 we have identified a few limitations of our specific implementation
-choices.  First of all, our choice to represent a panel as a frame and,
+choices.  Our choice to represent a panel as a frame and,
 independently, a set of VEs, means that VEs' relationship to the frame, or
 a VE's role in prior frames, is not available or manipulable.  By analogy
 with textual and verbal language, if a panel is analogous to a sentence,
 then we have grammar at the paragraph (narrative arc) level, but not at
-the sentence level.  Second, our choice to generate a transition sequence
-constrained by a grammar and {\em then} feed the transitions to a panel
-generator, itself a kind of pipeline model, means that the panel generator
+the sentence level.  Also, our choice to generate a transition sequence
+constrained by a grammar and {then} feed the transitions to a panel
+generator (itself a kind of pipeline model) means that the panel generator
 cannot reflect on the grammatical role of panels to guide its selection.
-%
 In another iteration of the project, we would use linguistic theories to
 generate panel internals by assigning grammatical roles to VEs that pertain
 to their visual rendering (such as character, prop, or backdrop), then use
