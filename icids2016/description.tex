@@ -99,7 +99,7 @@ and selects a new frame to accommodate them.
 
 
 We implemented our generator in OCaml and additionally implemented a
-front-end, a web-based renderer (not linked here for anonymous review). The
+front-end, a web-based renderer.\footnote{\url{http://go.ncsu.edu/comicgen}} The
 renderer assigns each frame type to a set of coordinates given by
 percentage of the vertical and horizontal panel size, and then renders
 panels by placing visual elements at those coordinates. Visual elements are
@@ -161,12 +161,12 @@ including the Western dramatic arc of \hbox{\em initial -- peak --
 release}. Formally, Cohn gives the following grammar as a general template
 for comic ``sentences,'' or well-formed arcs:
 
-\begin{quotation}
+%\begin{quotation}
 {\it (Establisher) -- (Initial (Prolongation)) -- Peak -- (Release)}
 \footnote{Symbols in parentheses are optional. In our expression of this grammar (and
 in several of Cohn's examples), we also assume that prolongations may occur
 arbitrarily many times in sequence.}
-\end{quotation}
+% \end{quotation}
 
 % Grossman built a generator based purely on Cohn's arc grammar,\footnote{
 %   \url{http://www.suzigrossman.com/fineart/conceptual/Sunday_Comics_Scrambler}
@@ -179,7 +179,7 @@ arbitrarily many times in sequence.}
 % with unrelated contents. Codifying the syntactic structure of
 % individual panels allows us to characterize relatedness between
 % panels. So 
-In our second iteration of the generator, we combine two
+\noindent In our second iteration of the generator, we combine two
 approaches to discourse, using {\em global} Cohn grammars to guide the {\em
 local} selection of syntactically-defined transitions.
 %
