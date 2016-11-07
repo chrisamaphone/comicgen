@@ -80,6 +80,18 @@ var frames = {
         }]
     },
 
+    "dialog": {
+        holes: [{
+            size: 100,
+            horiz: 20,
+            vert: 75
+        }, {
+            size: 100,
+            horiz: 80,
+            vert: 75
+           }]
+    },
+
     "carry": {
         holes: [{
             size: 100,
@@ -267,7 +279,7 @@ function add_comic_JSON() {
     comicSpecString = "";
     var constrained = document.getElementById('constrained').checked;
     if (constrained) {
-        comicSpecString = comic.gen_constrained(nves);
+        comicSpecString = comic.genconstrained(nves);
         arcSpec = JSON.parse(comicSpecString);
         comicSpec = arcSpec.comic;
     } else {

@@ -11,10 +11,11 @@ type frame = {name: string; nholes:int}
       {name="whisper"; nholes=2};
       {name="monolog"; nholes=1};
       {name="dialog"; nholes=2};
-      {name="touch"; nholes=2};
+      {name="harm"; nholes=2};
       {name="blank"; nholes=0};
-      {name="walk"; nholes=1};
-      {name="posse"; nholes=4};
+      {name="walk_left"; nholes=1};
+      {name="walk_right"; nholes=1};
+   (*   {name="posse"; nholes=4}; *)
       {name="carry"; nholes=2};
       {name="aid"; nholes=2};
       {name="fall"; nholes=1}
@@ -156,9 +157,12 @@ type comic = (panel * transition) list
          | Add ->
            let unused = nonmembers justPrior allPrior in
            let howManyNew = 1 (* Random.randRange (1,2) rand *) in
+           (* retain current frame
            let  {name; nholes} = pickFrame (currentNVEs + howManyNew) in
+            *)
+           let name = current_panel.name in
            let (new_elts, new_total) = pickRandomVEs unused howManyNew totalNVEs in
-           let new_elts = new_elts @ justPrior in
+           let new_elts = justPrior @ new_elts in
              ({name; elements=new_elts}, new_total)
          | Subtract ->
              if List.length justPrior > 0 then
@@ -257,20 +261,19 @@ type comic = (panel * transition) list
 
 
   (* Cohn grammars -> Transitions *)
-  (* XXX do i need to "open" or sthg to make this build w/ocamlbuild? *)
 
   (* possible first panels *)
   let valid_first role =
     match role with
-      Establisher -> ["walk"; "posse"; "carry"; "monolog"; "dialog"]
-    | Initial -> ["whisper"; "monolog"; "dialog"; "touch"; "walk"; "posse";
-        "carry"; "aid"; "fall"]
-    | Peak -> ["whisper"; "monolog"; "touch"; "dialog"; "walk"; "posse";
-        "carry"; "aid"; "fall"]
+      Establisher -> ["walk_left"; "walk_right"; "carry"; "monolog"; "dialog"]
+    | Initial -> ["whisper"; "monolog"; "dialog"; "touch"; "walk_left";
+        "walk_right";  "carry"; "aid"; "fall"]
+    | Peak -> ["whisper"; "monolog"; "touch"; "dialog"; "walk_left";
+        "walk_right"; "carry"; "aid"; "fall"]
     | _ -> []
 
 
-  (* XXX make these make sense *)
+  (* Valid transitions between grammatical roles *)
   let valid_transitions roles =
       match roles with
         (Establisher, Initial) -> [Moment; Subtract; Add; RendezVous]
@@ -314,7 +317,8 @@ type comic = (panel * transition) list
   type arc_comic = {sequence : role list; comic : comic}
   [@@deriving yojson]
 
-  let gen_constrained nves : arc_comic =
+  (* XXX underscore messed up js_of_ocaml? *)
+  let genconstrained nves : arc_comic =
     let seq = gen_seq () in
     {sequence=seq; comic=gen_constrained_by_seq nves seq}
 

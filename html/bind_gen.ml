@@ -6,9 +6,9 @@ let () =
       let comic = Gen.gen nves min max in
       Js.string (Yojson.Safe.pretty_to_string (Gen.comic_to_yojson comic))
     
-    method gen_constrained nves =
+    method genconstrained nves =
       Printf.eprintf "Call: nves=%d" nves;
-      let comic = Gen.gen_constrained nves in
+      let comic = Gen.genconstrained nves in
       Js.string (Yojson.Safe.pretty_to_string (Gen.arc_comic_to_yojson comic))
 
   end
